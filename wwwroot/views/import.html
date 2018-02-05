@@ -1,0 +1,44 @@
+<div class="card" style="padding: 15px;">
+    <div class="card-block">
+        <h4 class="card-title">Import</h4>
+        <p>Please paste a deck-list here and click import to add to your deck-lists.</p>
+
+        <form action="">
+            <div class="form-group">
+                <label for="deckName">Deck: </label>
+                <input type="text" class="form-control" placeholder="My Cool Deck" ng-model="importCtrl.form.deckName" />
+            </div>
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-bottom: 10px">
+                <li class="nav-item">
+                    <a class="nav-link" ng-class="{ 'active': importCtrl.tab == 1}" ng-click="importCtrl.tab = 1" href="">List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ng-class="{ 'active': importCtrl.tab == 2}" ng-click="importCtrl.tab = 2" href="">Limitless TCG</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade" ng-class="{ 'active show': importCtrl.tab == 1}" role="tabpanel" ng-show="importCtrl.tab == 1">
+                    <div class="form-group">
+                        <label for="deckImport">Deck List:</label>
+                        <textarea class="form-control" ng-model="importCtrl.form.deckList"></textarea>
+                    </div>
+        
+                    <div>
+                        <button class="btn btn-primary" type="button" ng-click="importCtrl.importDeck()">Import</button>
+                    </div>
+                </div>
+                <div class="tab-pane fade" ng-class="{ 'active show': importCtrl.tab == 2}" role="tabpanel"  ng-show="importCtrl.tab == 2">
+                    <div class="form-group">
+                        <label for="deckName">Limitless URL: </label>
+                        <input type="text" class="form-control" placeholder="http://limitlesstcg.com/decks/?list=XXX" ng-model="importCtrl.form.deckUrl" />
+                    </div>
+
+                    <div>
+                        <button class="btn btn-primary" type="button" ng-click="importCtrl.importFromLimitless()">Import</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

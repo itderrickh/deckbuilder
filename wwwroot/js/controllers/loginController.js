@@ -1,0 +1,17 @@
+app.controller('LoginController', ['$location', '$rootScope', 'LoginService', function($location, $rootScope, LoginService) {
+	var loginCtrl = this;
+	
+	loginCtrl.username = "";
+	loginCtrl.password = "";
+	loginCtrl.message = "";
+	loginCtrl.submit = function() {
+		LoginService.login(loginCtrl.username, loginCtrl.password).then(function(response) {
+			var res = JSON.parse(response.data);
+			$rootScope.token = res.access_token;
+			localStorage.setItem('token', $rootScope.token);
+			$location.path('/decks');
+		}, function() {
+			loginCtrl.message = "Username or password was incorrect. Please try again";
+		});
+	};
+}]);

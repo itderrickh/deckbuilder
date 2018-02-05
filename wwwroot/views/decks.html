@@ -1,0 +1,31 @@
+<div class="card" style="padding: 15px;">
+    <div class="card-block">
+        <h4 class="card-title">Deck Manager</h4>
+        <p>Select a deck in the list to view it.</p>
+
+        <label for="deckList">Deck: <select id="deckList" class="custom-select" ng-model="deckCtrl.selectedDeck" ng-options="item.name for item in deckCtrl.decks"></select></label>
+        <button class="btn btn-primary" ng-click="deckCtrl.loadDeck()">View</button>
+    </div>
+    <div class="card-block" style="margin-top: 10px" ng-show="deckCtrl.deckData.pokemon.length > 0 || deckCtrl.deckData.trainers.length > 0 || deckCtrl.deckData.energy.length > 0">
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <h5>Pok&#233;mon ({{deckCtrl.sum(deckCtrl.deckData.pokemon, 'count') }})</h5>
+                <ul>
+                    <li ng-repeat="pokemon in deckCtrl.deckData.pokemon">{{ pokemon.count }} - {{ pokemon.name }} {{ pokemon.setName }} {{ pokemon.number }}</li>
+                </ul>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <h5>Trainer Cards ({{deckCtrl.sum(deckCtrl.deckData.trainers, 'count') }})</h5>
+                <ul>
+                    <li ng-repeat="trainer in deckCtrl.deckData.trainers">{{ trainer.count }} - {{ trainer.name }} {{ trainer.setName }} {{ trainer.number }}</li>
+                </ul>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <h5>Energy ({{deckCtrl.sum(deckCtrl.deckData.energy, 'count') }})</h5>
+                <ul>
+                    <li ng-repeat="energy in deckCtrl.deckData.energy">{{ energy.count }} - {{ energy.name }} {{ energy.setName }} {{ energy.number }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

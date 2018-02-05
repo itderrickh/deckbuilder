@@ -1,0 +1,16 @@
+<div class="card" style="padding: 15px;">
+    <div class="card-block">
+        <h4 class="card-title">Export</h4>
+        <p>Export any of your decks from the menu below.</p>
+
+        <div class="form-group">
+            <label for="deckList">Deck:</label>
+            <select id="deckList" class="custom-select" ng-model="exportCtrl.selectedDeck" ng-change="exportCtrl.changeDeckText()" ng-options="item.name for item in exportCtrl.decks"></select>
+        </div>
+        
+        <div>
+            <button class="btn btn-primary" ngclipboard data-clipboard-text="{{exportCtrl.deckText}}" ngclipboard-success="exportCtrl.onClip(e);" ng-disabled="exportCtrl.disableButton">Export deck</button>
+            <span ng-show="exportCtrl.copyText">Copied decklist to clipboard!</span>
+        </div>
+    </div>
+</div>
