@@ -13,6 +13,9 @@ from Models.Deck import Deck
 from Models.User import User
 from datetime import timedelta
 from scipy.stats import hypergeom
+from Routes.DeckRoutes import deck_routes
+from Routes.CardRoutes import card_routes
+from Routes.DrawRoutes import draw_routes
 
 app = Flask(__name__)
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'wwwroot')
@@ -52,46 +55,6 @@ def page_not_found(error):
 	print(error)
 	return jsonify({ 'message': 'Error'}), 404
 
-@app.route("/api/decks/", methods=['GET'])
-@jwt_required()
-def get_decks():
-	res = ses.query(Deck).filter(Deck.userId==current_identity.id).all()
-	return jsonify(Deck.serialize_list(res))
-
-@app.route("/api/decks/import", methods=['POST'])
-@jwt_required()
-def add_deck():
-	content = request.get_json()
-	deck_list = get_deck_from_source(content['text'])
-
-	deck = Deck(name=content['name'], userId=current_identity.id)
-	ses.add(deck)
-	ses.commit()
-
-	for _, value in deck_list.items():
-		ses.add(Card(name=value['card'],count=value['count'],setName=value['set'],type=value['type'],deckId=deck.id,number=value['number']))
-
-	ses.commit()
-
-	return jsonify({ 'deck': deck.serialize() }), 201
-
-@app.route("/api/decks/import/limitless", methods=['POST'])
-@jwt_required()
-def import_limitless_deck():
-	content = request.get_json()
-	deck_list = get_deck_from_limitless_tcg(content['url'])
-
-	deck = Deck(name=content['name'], userId=current_identity.id)
-	ses.add(deck)
-	ses.commit()
-
-	for _, value in deck_list.items():
-		ses.add(Card(name=value['card'],count=value['count'],setName=value['set'],type=value['type'],deckId=deck.id,number=value['number']))
-
-	ses.commit()
-
-	return jsonify({ 'deck': deck.serialize() }), 201
-
 @app.route("/api/sets/", methods=['GET'])
 def get_sets():
 	res = ses.query(Card).all()
@@ -101,43 +64,9 @@ def get_sets():
 
 	return jsonify(list(d))
 
-@app.route("/api/decks/<deckid>", methods=['GET'])
-@jwt_required()
-def get_deck(deckid):
-	res = ses.query(Deck).filter(Deck.id==deckid and current_identity.id == Deck.userId).first()
-	return jsonify(res.serialize())
-
-@app.route("/api/cards/deck/<deckid>", methods=['GET'])
-@jwt_required()
-def get_cards(deckid):
-	res = ses.query(Card).filter(Card.deckId==deckid).all()
-	return jsonify(Card.serialize_list(res))
-
-@app.route("/api/cards/deck/export/<deckid>", methods=['GET'])
-@jwt_required()
-def get_cards_export(deckid):
-	res = ses.query(Card).filter(Card.deckId==deckid).all()
-
-	return jsonify({ 'deck': Card.serialize_list(res), 'text': create_deck_list(res)})
-
-@app.route("/api/deck/bulk", methods=['POST'])
-@jwt_required()
-def create_deck_bulk():
-	content = request.get_json()
-	deck = Deck(name=content['name'], userId=current_identity.id)
-	ses.add(deck)
-	ses.commit()
-
-	for value in content['deck']:
-		ses.add(Card(name=value['name'],count=value['count'],setName=value['setName'],type=value['type'],deckId=deck.id,number=value['number']))
-
-	return jsonify({ }), 204
-
-@app.route("/api/draw/<decksize>/<targets>/<drawn>", methods=['GET'])
-def draw_calc(decksize, targets, drawn):
-	hpd = hypergeom(int(decksize), int(targets), int(drawn))
-	li = [hpd.pmf(c) for c in range(1,int(drawn))]
-	return jsonify({ 'result': sum(li) })
+app.register_blueprint(card_routes)
+app.register_blueprint(deck_routes)
+app.register_blueprint(draw_routes)
 
 if __name__ == '__main__':
 	app.run()
