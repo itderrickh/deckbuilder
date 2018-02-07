@@ -10,10 +10,13 @@ Base.metadata.bind = Engine
 Base.metadata.create_all()
 
 def seed():
-    u1 = User(name="Derrick Heinemann", username="itderrickh", password=pbkdf2_sha256.hash('itderrickh'))
-    d1 = Deck(name="Zoropod", userId=1)
-    c1 = Card(name="Zoroark-GX",count=4,setName="SLG",deckId=1,type="Trainer Cards",number="SM84")
-    ses.add(u1)
-    ses.add(d1)
-    ses.add(c1)
-    ses.commit()
+    if len(ses.query(User).all()) <= 0:
+        u1 = User(name="Derrick Heinemann", username="itderrickh", password=pbkdf2_sha256.hash('itderrickh'))
+        ses.add(u1)
+        ses.commit()
+    #d1 = Deck(name="Zoropod", userId=1)
+    #c1 = Card(name="Zoroark-GX",count=4,setName="SLG",deckId=1,type="Trainer Cards",number="SM84")
+    
+    #ses.add(d1)
+    #ses.add(c1)
+    
