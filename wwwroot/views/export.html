@@ -11,6 +11,7 @@
         <div>
             <button class="btn btn-primary" ngclipboard data-clipboard-text="{{exportCtrl.deckText}}" ngclipboard-success="exportCtrl.onClip(e);" ng-disabled="exportCtrl.disableButton">Export deck</button>
             <span ng-show="exportCtrl.copyText">Copied decklist to clipboard!</span>
+            <button class="btn btn-primary" ng-disabled="exportCtrl.disableButton" ng-click="exportCtrl.exportOfficial()">Export Decklist [Official]</button>
         </div>
     </div>
 </div>
