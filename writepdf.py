@@ -54,9 +54,9 @@ def write_to_pdf(cards, user, outputPDF):
         # Name
         can.drawString(320, 586 - (i * 13.2), pokemon[i].name)
         # Set
-        can.drawString(492, 586 - (i * 13.2), pokemon[i].setName)
+        can.drawString(486, 586 - (i * 13.2), pokemon[i].setName)
         # Number
-        can.drawString(547, 586 - (i * 13.2), pokemon[i].number)
+        can.drawString(534, 586 - (i * 13.2), pokemon[i].number)
 
     # Trainers
     for i in list(range(0, len(trainers))):
