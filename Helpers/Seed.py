@@ -8,14 +8,14 @@ from AppState.Session import Engine
 from passlib.hash import pbkdf2_sha256
 import datetime
 
-Base.metadata.bind = Engine        
+Base.metadata.bind = Engine
 Base.metadata.create_all()
 
 def seed():
     if len(ses.query(User).all()) <= 0:
         u1 = User(name="Derrick Heinemann", username="itderrickh", password=pbkdf2_sha256.hash('itderrickh'),playerid='2548696',dateofbirth=datetime.date(1993, 9, 14))
         ses.add(u1)
-        
+
         s1 = CardSet(name="XY - Kalos Starter Set", setName="KSS", standard=False)
         s2 = CardSet(name="XY", setName="XY", standard=False)
         s3 = CardSet(name="XY - Flashfire", setName="FLF", standard=False)
@@ -29,7 +29,7 @@ def seed():
         s11 = CardSet(name="XY - Fates Collide", setName="FCO", standard=True)
         s12 = CardSet(name="XY - Steam Seige", setName="STS", standard=True)
         s13 = CardSet(name="Double Crisis", setName="DCR", standard=True)
-        
+
         s14 = CardSet(name="Generations", setName="GEN", standard=True)
         s15 = CardSet(name="XY Trainer Kit", setName="TK", standard=True)
         s16 = CardSet(name="Sun & Moon", setName="SUM", standard=True)
@@ -40,12 +40,12 @@ def seed():
 
         s21 = CardSet(name="Shining Legends", setName="SLG", standard=True)
         s22 = CardSet(name="Sun & Moon Trainer Kit", setName="TK", standard=True)
-        s23 = CardSet(name="Black Star Promos BW01 and higher", setName="PR", standard=False)
-        s24 = CardSet(name="Black Star Promos XY01-XY66", setName="PR", standard=False)
-        s25 = CardSet(name="Black Star Promos XY67 and higher", setName="PR", standard=True)
-        s26 = CardSet(name="Black Star Promos SM01 and higher", setName="PR", standard=True)
+        s23 = CardSet(name="Black Star Promos BW01 and higher", setName="PR-BW", standard=False)
+        s24 = CardSet(name="Black Star Promos XY01-XY66", setName="PR-XY", standard=False)
+        s25 = CardSet(name="Black Star Promos XY67 and higher", setName="PR-XY", standard=True)
+        s26 = CardSet(name="Black Star Promos SM01 and higher", setName="PR-SM", standard=True)
         s27 = CardSet(name="McDonald's Collection", setName="MCD", standard=True)
-        
+
         s28 = CardSet(name="Black & White - Legendary Treasures", setName="LTR", standard=False)
         s29 = CardSet(name="Black & White - Plasma Blast", setName="PLB", standard=False)
         s30 = CardSet(name="Black & White - Plasma Freeze", setName="PLF", standard=False)
@@ -104,7 +104,6 @@ def seed():
 
     #d1 = Deck(name="Zoropod", userId=1)
     #c1 = Card(name="Zoroark-GX",count=4,setName="SLG",deckId=1,type="Trainer Cards",number="SM84")
-    
+
     #ses.add(d1)
     #ses.add(c1)
-    

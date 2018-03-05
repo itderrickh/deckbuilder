@@ -2,9 +2,13 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+from Models.CardSet import CardSet
 import datetime
+import os
+from AppState.Session import ses
 
-def write_to_pdf(cards, user):
+pdf_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pdfgen')
+def write_to_pdf(cards, user, outputPDF):
     bd = user.dateofbirth
     pokemon = [x for x in cards if x.type == 'Pok\u00e9mon']
     trainers = [x for x in cards if x.type == 'Trainer Cards']
@@ -12,7 +16,14 @@ def write_to_pdf(cards, user):
     pksum = sum(c.count for c in pokemon)
     tcsum = sum(c.count for c in trainers)
     ensum = sum(c.count for c in energy)
+    cardSets = [x.setName for x in cards]
+    setLists = ses.query(CardSet).filter(CardSet.setName in cardSets)
+    standard_legal = all(x.standard for x in setLists)
 
+    if standard_legal:
+        print("THIS DECK IS DEFINITELY STANDARD LEGAL")
+    else:
+        print("MAYBE NOT STANDARD LEGAL")
     packet = io.BytesIO()
     # create a new PDF with Reportlab
     can = canvas.Canvas(packet, pagesize=letter)
@@ -70,8 +81,7 @@ def write_to_pdf(cards, user):
     page.mergePage(new_pdf.getPage(0))
     output.addPage(page)
     # finally, write "output" to a real file
-    outputStream2 = io.BytesIO()
-    output.write(outputStream2)
-    #outputStream = open(outputPDF, "wb")
-    #output.write(outputStream)
-    return outputStream2.getvalue()
+    outputStream = open(os.path.join(pdf_file_dir, outputPDF), "wb")
+    output.write(outputStream)
+    outputStream.close()
+    return outputPDF

@@ -34,7 +34,7 @@ app.controller('ExportController', ['ExportService', '$timeout', '$window', func
 
     exportCtrl.exportOfficial = function() {
         exportService.exportOfficial(exportCtrl.selectedDeck.id).then(function(response) {
-            $window.open(response.data);
+            $window.open("http://localhost:5000/api/pdf/" + response.data.pdffile, '', 'height=650,width=840');
         });
     };
 
