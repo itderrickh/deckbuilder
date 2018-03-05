@@ -137,3 +137,9 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
+# Project Specific
+# =========================
+
+!wwwroot/lib
