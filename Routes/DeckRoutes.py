@@ -6,6 +6,7 @@ from flask.json import jsonify
 from AppState.Session import ses
 from Helpers.DeckLib import create_deck_list, get_deck_from_source, get_deck_from_limitless_tcg
 from writepdf import write_to_pdf
+from Helpers.Deckmin import get_shared_decklist, print_deck
 import uuid
 import os
 import time
@@ -92,6 +93,18 @@ def one_time_pdf(pdfid):
 	else:
 		resp = ('', 404)
 		return resp
+
+@deck_routes.route("/api/deck/deckmin/<deckOneId>/<deckTwoId>", methods=['GET'])
+@jwt_required()
+def deck_min(deckOneId, deckTwoId):
+	d1 = ses.query(Card).filter(Card.deckId==deckOneId).all()
+	d2 = ses.query(Card).filter(Card.deckId==deckTwoId).all()
+	shared, deck1, deck2 = get_shared_decklist(d1, d2)
+
+	slim_deck_one = {x:y for x, y in deck1.items() if y != 0}
+	slim_deck_two = {x:y for x, y in deck2.items() if y != 0}
+
+	return jsonify({ 'deckOne': slim_deck_one, 'deckTwo': slim_deck_two, 'shared': shared }), 201
 
 def delay_delete(delay, path):
 	time.sleep(delay)
