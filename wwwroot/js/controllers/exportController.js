@@ -1,4 +1,4 @@
-app.controller('ExportController', ['ExportService', '$timeout', function(exportService, $timeout) {
+app.controller('ExportController', ['ExportService', '$timeout', '$window', function(exportService, $timeout, $window) {
     var exportCtrl = this;
 
     exportCtrl.deckText = '';
@@ -29,6 +29,12 @@ app.controller('ExportController', ['ExportService', '$timeout', function(export
             if(exportCtrl.selectedDeck) {
                 exportCtrl.disableButton = false;
             }
+        });
+    };
+
+    exportCtrl.exportOfficial = function() {
+        exportService.exportOfficial(exportCtrl.selectedDeck.id).then(function(response) {
+            $window.open(response.data);
         });
     };
 

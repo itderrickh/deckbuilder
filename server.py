@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, Response
 from flask.json import jsonify
 from flask_jwt import JWT, current_identity, jwt_required
 from passlib.hash import pbkdf2_sha256
@@ -9,10 +9,13 @@ from AppState.Session import ses
 from Helpers.DeckLib import create_deck_list, get_deck_from_source, get_deck_from_limitless_tcg
 from Helpers.Seed import seed
 from Models.Card import Card
+from Models.CardSet import CardSet
 from Models.Deck import Deck
 from Models.User import User
 from datetime import timedelta
 from scipy.stats import hypergeom
+from writepdf import write_to_pdf
+import uuid
 
 app = Flask(__name__)
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'wwwroot')
@@ -94,7 +97,7 @@ def import_limitless_deck():
 
 @app.route("/api/sets/", methods=['GET'])
 def get_sets():
-	res = ses.query(Card).all()
+	res = ses.query(CardSet).all()
 	d = set()
 	for x in res:
 		d.add(x.setName)
@@ -119,6 +122,18 @@ def get_cards_export(deckid):
 	res = ses.query(Card).filter(Card.deckId==deckid).all()
 
 	return jsonify({ 'deck': Card.serialize_list(res), 'text': create_deck_list(res)})
+
+@app.route("/api/deck/exportpdf/<deckid>", methods=['GET'])
+@jwt_required()
+def export_pdf(deckid):
+	res = ses.query(Card).filter(Card.deckId==deckid).all()
+	uid = uuid.uuid4()
+	outfile = write_to_pdf(res, current_identity)
+	resp = Response(outfile)
+	resp.headers['Content-Disposition'] = "inline; filename=%s" % uid + ".pdf"
+	resp = Response(outfile)
+	resp.mimetype = 'application/pdf'
+	return resp
 
 @app.route("/api/deck/bulk", methods=['POST'])
 @jwt_required()

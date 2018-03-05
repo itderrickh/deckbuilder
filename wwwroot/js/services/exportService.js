@@ -17,6 +17,15 @@ app.service('ExportService', ['$http', '$rootScope', function($http, $rootScope)
                     'Authorization': 'JWT ' + $rootScope.token
                 }
             });
+        },
+        exportOfficial: function(id) {
+            return $http({
+                method: 'GET',
+                url: 'http://localhost:5000/api/deck/exportpdf/' + id,
+                headers: {
+                    'Authorization': 'JWT ' + $rootScope.token
+                }
+            });
         }
     }
 }]);
