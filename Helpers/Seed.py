@@ -2,16 +2,28 @@ from AppState.Session import ses
 from Models.ModelBase import Base
 from Models.Card import Card
 from Models.Deck import Deck
+from Models.DeckCard import DeckCard
 from Models.User import User
 from Models.CardSet import CardSet
 from AppState.Session import Engine
 from passlib.hash import pbkdf2_sha256
 import datetime
+import json
+import glob
 
 Base.metadata.bind = Engine
 Base.metadata.create_all()
 
 def seed():
+    for item in glob.glob('../Data/json/cards/*.json'):
+        print('../Data/json/cards/{}'.format(item))
+        with open('../Data/json/cards/{}'.format(item)) as f:
+            data = json.load(f)
+            for d in data:
+                ses.add(Card())
+
+            #Do Something with the data
+
     if len(ses.query(User).all()) <= 0:
         u1 = User(name="Derrick Heinemann", username="itderrickh", password=pbkdf2_sha256.hash('itderrickh'),playerid='2548696',dateofbirth=datetime.date(1993, 9, 14))
         ses.add(u1)

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, abort, request, send_file, after_t
 from flask_jwt import JWT, current_identity, jwt_required
 from Models.Deck import Deck
 from Models.Card import Card
+from Models.DeckCard import DeckCard
 from flask.json import jsonify
 from AppState.Session import ses
 from Helpers.DeckLib import create_deck_list, get_deck_from_source, get_deck_from_limitless_tcg
@@ -14,7 +15,7 @@ from threading import Thread
 
 pdf_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../pdfgen')
 deck_routes = Blueprint('deck_routes', __name__,
-                        template_folder='templates')
+						template_folder='templates')
 
 @deck_routes.route("/api/deck/bulk", methods=['POST'])
 @jwt_required()
@@ -25,7 +26,9 @@ def create_deck_bulk():
 	ses.commit()
 
 	for value in content['deck']:
-		ses.add(Card(name=value['name'],count=value['count'],setName=value['setName'],type=value['type'],deckId=deck.id,number=value['number']))
+		card = ses.query(Card).filter(Card.name==value['card'] and Card.setName==value['set'] and Card.number==value['number']).first()
+		#ses.add(Card(name=value['card'],count=value['count'],setName=value['set'],type=value['type'],deckId=deck.id,number=value['number']))
+		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	return jsonify({ }), 204
 
@@ -52,7 +55,9 @@ def add_deck():
 	ses.commit()
 
 	for _, value in deck_list.items():
-		ses.add(Card(name=value['card'],count=value['count'],setName=value['set'],type=value['type'],deckId=deck.id,number=value['number']))
+		card = ses.query(Card).filter(Card.name==value['card'] and Card.setName==value['set'] and Card.number==value['number']).first()
+		#ses.add(Card(name=value['card'],count=value['count'],setName=value['set'],type=value['type'],deckId=deck.id,number=value['number']))
+		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	ses.commit()
 
@@ -69,7 +74,9 @@ def import_limitless_deck():
 	ses.commit()
 
 	for _, value in deck_list.items():
-		ses.add(Card(name=value['card'],count=value['count'],setName=value['set'],type=value['type'],deckId=deck.id,number=value['number']))
+		card = ses.query(Card).filter(Card.name==value['card'] and Card.setName==value['set'] and Card.number==value['number']).first()
+		#ses.add(Card(name=value['card'],count=value['count'],setName=value['set'],type=value['type'],deckId=deck.id,number=value['number']))
+		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	ses.commit()
 
@@ -97,8 +104,18 @@ def one_time_pdf(pdfid):
 @deck_routes.route("/api/deck/deckmin/<deckOneId>/<deckTwoId>", methods=['GET'])
 @jwt_required()
 def deck_min(deckOneId, deckTwoId):
-	d1 = ses.query(Card).filter(Card.deckId==deckOneId).all()
-	d2 = ses.query(Card).filter(Card.deckId==deckTwoId).all()
+	c1 = ses.query(DeckCard).filter(DeckCard.deckId==deckOneId).all()
+	c2 = ses.query(DeckCard).filter(DeckCard.deckId==deckTwoId).all()
+
+	d1 = ses.query(Card).filter(any(x.cardId == Card.Id for x in c1)).all()
+	d2 = ses.query(Card).filter(any(x.cardId == Card.Id for x in c2)).all()
+
+	for card in d1:
+		card.count = (r.count for r in c1 if card.id==r.cardId)
+
+	for card in d2:
+		card.count = (r.count for r in c2 if card.id==r.cardId)
+
 	shared, deck1, deck2 = get_shared_decklist(d1, d2)
 
 	slim_deck_one = {x:y for x, y in deck1.items() if y != 0}
