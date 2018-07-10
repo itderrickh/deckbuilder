@@ -2,7 +2,7 @@ app.controller('DeckController', ['DeckService', function(deckService) {
     var deckCtrl = this;
     deckCtrl.selectedDeck = {};
     deckCtrl.decks = [];
-    
+
     deckCtrl.sum = function(items, prop){
         return items.reduce( function(a, b){
             return a + b[prop];
@@ -15,7 +15,7 @@ app.controller('DeckController', ['DeckService', function(deckService) {
             deckCtrl.deckData = { pokemon: [], trainers: [], energy: []};
             var data = response.data;
             var pokemon = data.filter(function(item) { return item.type == 'Pok\u00e9mon' });
-            var trainers = data.filter(function(item) { return item.type == 'Trainer Cards' });
+            var trainers = data.filter(function(item) { return item.type == 'Trainer' });
             var energy = data.filter(function(item) { return item.type == 'Energy' });
 
             deckCtrl.deckData.pokemon = pokemon;

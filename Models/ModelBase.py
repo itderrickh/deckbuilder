@@ -8,11 +8,11 @@ class JSONType(TypeDecorator):
     def process_bind_param(self, value, dialect):
         if value is None:
             return None
-        return json.dumps(value, use_decimal=True)
+        return json.dumps(value)
 
     def process_result_value(self, value, dialect):
         if not value:
             return None
-        return json.loads(value, use_decimal=True)
+        return json.loads(value)
 
 Base = declarative_base()

@@ -1,5 +1,5 @@
 from AppState.Session import ses
-from Models.ModelBase import Base
+from Models.ModelBase import Base, JSONType
 from Models.Card import Card
 from Models.Deck import Deck
 from Models.DeckCard import DeckCard
@@ -15,14 +15,29 @@ Base.metadata.bind = Engine
 Base.metadata.create_all()
 
 def seed():
-    for item in glob.glob('../Data/json/cards/*.json'):
-        print('../Data/json/cards/{}'.format(item))
-        with open('../Data/json/cards/{}'.format(item)) as f:
+    for item in glob.glob('./Data/json/cards/*'):
+        print(item)
+        with open(item, encoding="utf8") as f:
             data = json.load(f)
             for d in data:
-                ses.add(Card())
+                ses.add(
+                    Card(
+                        name=d['name'].encode('UTF-8'),
+                        subtype=d.get('subtype'),
+                        type=d.get('supertype'),
+                        evolvesFrom=d.get('evolvesFrom', '').encode('UTF-8'),
+                        ability=d.get('ability'),
+                        hp=int(d.get('hp') if str(d.get('hp')) != "None" else 0),
+                        retreatCost=d.get('convertedRetreatCost'),
+                        artist=d['artist'],
+                        rarity=d.get('rarity'),
+                        setName=d['series'] + " - " + d['set'],
+                        types=d.get('types'),
+                        attacks=d.get('attacks'),
+                        weaknesses=d.get('weaknesses'),
+                        number=d['number']))
 
-            #Do Something with the data
+    ses.commit()
 
     if len(ses.query(User).all()) <= 0:
         u1 = User(name="Derrick Heinemann", username="itderrickh", password=pbkdf2_sha256.hash('itderrickh'),playerid='2548696',dateofbirth=datetime.date(1993, 9, 14))
@@ -40,7 +55,7 @@ def seed():
         s10 = CardSet(name="XY - BREAKpoint", setName="BKP", standard=True)
         s11 = CardSet(name="XY - Fates Collide", setName="FCO", standard=True)
         s12 = CardSet(name="XY - Steam Seige", setName="STS", standard=True)
-        s13 = CardSet(name="Double Crisis", setName="DCR", standard=True)
+        s13 = CardSet(name="XY - Double Crisis", setName="DCR", standard=True)
 
         s14 = CardSet(name="Generations", setName="GEN", standard=True)
         s15 = CardSet(name="XY Trainer Kit", setName="TK", standard=True)
@@ -50,7 +65,7 @@ def seed():
         s19 = CardSet(name="Sun & Moon - Crimson Invasion", setName="CIN", standard=True)
         s20 = CardSet(name="Sun & Moon - Ultra Prism", setName="UPR", standard=True)
 
-        s21 = CardSet(name="Shining Legends", setName="SLG", standard=True)
+        s21 = CardSet(name="Sun & Moon - Shining Legends", setName="SLG", standard=True)
         s22 = CardSet(name="Sun & Moon Trainer Kit", setName="TK", standard=True)
         s23 = CardSet(name="Black Star Promos BW01 and higher", setName="PR-BW", standard=False)
         s24 = CardSet(name="Black Star Promos XY01-XY66", setName="PR-XY", standard=False)
@@ -112,10 +127,3 @@ def seed():
         ses.add(s39)
 
         ses.commit()
-
-
-    #d1 = Deck(name="Zoropod", userId=1)
-    #c1 = Card(name="Zoroark-GX",count=4,setName="SLG",deckId=1,type="Trainer Cards",number="SM84")
-
-    #ses.add(d1)
-    #ses.add(c1)

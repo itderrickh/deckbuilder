@@ -3,6 +3,7 @@ from flask_jwt import JWT, current_identity, jwt_required
 from Models.Deck import Deck
 from Models.Card import Card
 from Models.DeckCard import DeckCard
+from Models.CardSet import CardSet
 from flask.json import jsonify
 from AppState.Session import ses
 from Helpers.DeckLib import create_deck_list, get_deck_from_source, get_deck_from_limitless_tcg
@@ -17,17 +18,25 @@ pdf_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../pdf
 deck_routes = Blueprint('deck_routes', __name__,
 						template_folder='templates')
 
+def getSet(sets, setCode):
+	return next(s.name for s in sets if s.setName == setCode)
+
 @deck_routes.route("/api/deck/bulk", methods=['POST'])
 @jwt_required()
 def create_deck_bulk():
 	content = request.get_json()
 	deck = Deck(name=content['name'], userId=current_identity.id)
+	sets = ses.query(CardSet).all()
 	ses.add(deck)
 	ses.commit()
 
 	for value in content['deck']:
-		card = ses.query(Card).filter(Card.name==value['card'] and Card.setName==value['set'] and Card.number==value['number']).first()
-		#ses.add(Card(name=value['card'],count=value['count'],setName=value['set'],type=value['type'],deckId=deck.id,number=value['number']))
+		if value['type'] == "Energy":
+			if "Energy" not in value['card']:
+				value['card'] += " Energy"
+			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
+		else:
+			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8') and Card.setName==getSet(sets, value['set']) and Card.number==value['number']).first()
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	return jsonify({ }), 204
@@ -49,14 +58,18 @@ def get_decks():
 def add_deck():
 	content = request.get_json()
 	deck_list = get_deck_from_source(content['text'])
-
+	sets = ses.query(CardSet).all()
 	deck = Deck(name=content['name'], userId=current_identity.id)
 	ses.add(deck)
 	ses.commit()
 
 	for _, value in deck_list.items():
-		card = ses.query(Card).filter(Card.name==value['card'] and Card.setName==value['set'] and Card.number==value['number']).first()
-		#ses.add(Card(name=value['card'],count=value['count'],setName=value['set'],type=value['type'],deckId=deck.id,number=value['number']))
+		if value['type'] == "Energy":
+			if "Energy" not in value['card']:
+				value['card'] += " Energy"
+			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
+		else:
+			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8') and Card.setName==getSet(sets, value['set']) and Card.number==value['number']).first()
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	ses.commit()
@@ -68,14 +81,18 @@ def add_deck():
 def import_limitless_deck():
 	content = request.get_json()
 	deck_list = get_deck_from_limitless_tcg(content['url'])
-
+	sets = ses.query(CardSet).all()
 	deck = Deck(name=content['name'], userId=current_identity.id)
 	ses.add(deck)
 	ses.commit()
 
 	for _, value in deck_list.items():
-		card = ses.query(Card).filter(Card.name==value['card'] and Card.setName==value['set'] and Card.number==value['number']).first()
-		#ses.add(Card(name=value['card'],count=value['count'],setName=value['set'],type=value['type'],deckId=deck.id,number=value['number']))
+		if value['type'] == "Energy":
+			if "Energy" not in value['card']:
+				value['card'] += " Energy"
+			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
+		else:
+			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8') and Card.setName==getSet(sets, value['set']) and Card.number==value['number']).first()
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	ses.commit()

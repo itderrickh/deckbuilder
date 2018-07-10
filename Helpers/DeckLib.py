@@ -7,20 +7,23 @@ def get_deck_from_source(text):
     deck = dict()
     full_text = text.split("\n")
     card_type = ""
-    for line in full_text:
-        if line[0:2] == '##':
-            type_splitter = line[2:].split(" ")
-            card_type = ' '.join(str(x) for x in type_splitter[:len(type_splitter) - 2])
-        if line[0:2] == '* ':
-            text = line[2:]
-            splitter = text.split(" ")
-            # Get the last words (which are the card name)
-            card = ' '.join(str(x) for x in splitter[1:len(splitter) - 1])
-            cardName = ' '.join(str(x) for x in splitter[1:len(splitter) - 2])
-            if card not in deck:
-                deck[card] = { 'count': int(splitter[0]), 'set': splitter[len(splitter) - 2], 'card': cardName, 'type': card_type, 'number': splitter[len(splitter) - 1] }
-            else:
-                deck[card]['count'] += int(splitter[0])
+    if text.startswith("Pokemon"):
+        deck = get_from_text(text)
+    else:
+        for line in full_text:
+            if line[0:2] == '##':
+                type_splitter = line[2:].split(" ")
+                card_type = ' '.join(str(x) for x in type_splitter[:len(type_splitter) - 2])
+            if line[0:2] == '* ':
+                text = line[2:]
+                splitter = text.split(" ")
+                # Get the last words (which are the card name)
+                card = ' '.join(str(x) for x in splitter[1:len(splitter) - 1])
+                cardName = ' '.join(str(x) for x in splitter[1:len(splitter) - 2])
+                if card not in deck:
+                    deck[card] = { 'count': int(splitter[0]), 'set': splitter[len(splitter) - 2], 'card': cardName, 'type': card_type, 'number': splitter[len(splitter) - 1] }
+                else:
+                    deck[card]['count'] += int(splitter[0])
     return deck
 
 def create_deck_list(cards):
@@ -35,7 +38,7 @@ def create_deck_list(cards):
     text += '##Pok\u00e9mon - ' + str(pksum) + '\n\n'
 
     for pk in pokemon:
-        text += '* ' + str(pk.count) + ' ' + pk.name + ' ' + pk.setName + ' ' + pk.number + '\n' 
+        text += '* ' + str(pk.count) + ' ' + pk.name + ' ' + pk.setName + ' ' + pk.number + '\n'
 
     text += '\n##Trainer Cards - ' + str(tcsum) + '\n\n'
 

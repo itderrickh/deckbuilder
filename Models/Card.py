@@ -9,6 +9,7 @@ class Card(Base, Serializer):
     Id = Column(Integer, primary_key=True)
     name = Column(String)
     subtype = Column(String)
+    evolvesFrom = Column(String)
     hp = Column(Integer)
     retreatCost = Column(Integer)
     artist = Column(String)
@@ -17,19 +18,25 @@ class Card(Base, Serializer):
     attacks = Column(JSONType)
     weaknesses = Column(JSONType)
     evolvesTo = Column(JSONType)
+    ability = Column(JSONType)
     setName = Column(String)
     type = Column(String)   #supertype
     number = Column(String)
-
-    def __init__(self):
-       self.count = 0
+    count = 0
 
     def serialize(self):
         d = Serializer.serialize(self)
-        del d['deck']
+        d['name'] = str(d['name'].decode("utf-8"))
+        d['evolvesFrom'] = str(d['evolvesFrom'].decode("utf-8"))
+        d['count'] = self.count
         return d
 
     def serialize_full(self):
         d = Serializer.serialize(self)
-        d['deck'] = d['deck'].serialize()
+        d['types'] = d['types'].serialize()
+        d['attacks'] = d['attacks'].serialize()
+        d['weaknesses'] = d['weaknesses'].serialize()
+        d['evolvesTo'] = d['evolvesTo'].serialize()
+        d['ability'] = d['ability'].serialize()
+        d['count'] = self.count
         return d
