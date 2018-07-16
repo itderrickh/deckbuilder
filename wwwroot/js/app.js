@@ -27,7 +27,7 @@ app.factory('authHttpResponseInterceptor',['$q','$location',function($q,$locatio
 	$httpProvider.interceptors.push('authHttpResponseInterceptor');
 }]);
 
-app.run(function($rootScope, $location, $http) {
+app.run(['$rootScope', '$location', '$http', function($rootScope, $location, $http) {
     $rootScope.css = "base";
 	$rootScope.BASE_URL = "http://localhost:5000/api/";
 	$rootScope.token = localStorage.getItem('token');
@@ -46,9 +46,9 @@ app.run(function($rootScope, $location, $http) {
 			}
 		}
     });
-});
+}]);
 
-app.config(function($routeProvider) {
+app.config(['$routeProvider', function($routeProvider) {
     var resolve = function(token) {
 		return typeof(token) != 'undefined' && token != '';
     };
@@ -100,4 +100,4 @@ app.config(function($routeProvider) {
     }).otherwise({
 		redirectTo: "/login"
 	});
-});
+}]);
