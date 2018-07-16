@@ -1,20 +1,23 @@
 <div class="card" style="padding: 15px;">
     <div class="card-block">
-        <h4 class="card-title">Login</h4>
-        <p>You must login to view your content</p>
+        <form ng-submit="loginCtrl.submit()">
+            <h4 class="card-title">Login</h4>
+            <p>You must login to view your content</p>
 
-        <div class="form-group">
-            <label for="">Username</label>
-            <input type="text" class="form-control" ng-model="loginCtrl.username" placeholder="">
-        </div>
-        <div class="form-group">
-            <label for="">Password</label>
-            <input type="password" class="form-control" ng-model="loginCtrl.password" placeholder="">
-        </div>
-        <small id="helpId" class="form-text text-muted" ng-show="loginCtrl.message.length > 0">{{loginCtrl.message}}</small>
+            <div class="form-group">
+                <label for="">Username</label>
+                <input type="text" class="form-control" ng-model="loginCtrl.username" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="">Password</label>
+                <input type="password" class="form-control" ng-model="loginCtrl.password" placeholder="">
+            </div>
+            <small id="helpId" class="form-text text-muted" ng-show="loginCtrl.message.length > 0">{{loginCtrl.message}}</small>
 
-        <div>
-            <button class="btn btn-primary" ng-click="loginCtrl.submit()">Login</button>
-        </div>
+            <div>
+                <button class="btn btn-primary" type="submit">Login</button>
+            </div>
+        </form>
+
     </div>
 </div>

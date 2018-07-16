@@ -28,15 +28,20 @@ app.factory('authHttpResponseInterceptor',['$q','$location',function($q,$locatio
 }]);
 
 app.run(function($rootScope, $location, $http) {
+    $rootScope.css = "base";
 	$rootScope.BASE_URL = "http://localhost:5000/api/";
 	$rootScope.token = localStorage.getItem('token');
 	if($rootScope.token != null) {
-		$rootScope.user = tokenToUser($rootScope.token);
+        $rootScope.user = tokenToUser($rootScope.token);
+        $rootScope.css = $rootScope.user.theme;
 	}
-	
+
 	$rootScope.$on('$routeChangeStart', function(event, next, current) {
 		if(typeof(next.resolve) != 'undefined') {
-			if($rootScope.token == null || !next.resolve($rootScope.token)) {
+            if(next.resolve.logout) {
+                next.resolve.logout($rootScope);
+                $location.path('/login');
+            } else if($rootScope.token == null || !next.resolve($rootScope.token)) {
 				$location.path('/login');
 			}
 		}
@@ -47,7 +52,7 @@ app.config(function($routeProvider) {
     var resolve = function(token) {
 		return typeof(token) != 'undefined' && token != '';
     };
-    
+
     $routeProvider
     .when("/", {
         templateUrl : "./views/main.html",
@@ -82,6 +87,16 @@ app.config(function($routeProvider) {
         templateUrl : "./views/draw.html",
         controller: "DrawController",
         controllerAs: "drawCtrl"
+    }).when("/logout", {
+        resolve: {
+            logout: function($rootScope) {
+                $rootScope.token = null;
+                $rootScope.user = null;
+                $rootScope.css = "base";
+                localStorage.removeItem('token')
+                return true;
+            }
+        }
     }).otherwise({
 		redirectTo: "/login"
 	});

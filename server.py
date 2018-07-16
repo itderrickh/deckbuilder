@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from flask import Flask, request, send_from_directory, Response
 from flask.json import jsonify
 from flask_jwt import JWT, current_identity, jwt_required
@@ -29,11 +30,21 @@ def authenticate(username, password):
 		return user
 
 def identity(payload):
-	user_id = payload['identity']
+	user_id = payload['user_id']
 	user = ses.query(User).filter(User.id==user_id).first()
 	return user
 
 jwt = JWT(app, authenticate, identity)
+
+@jwt.jwt_payload_handler
+def make_payload(identity):
+    return {
+		'user_id': identity.id,
+		'theme': identity.theme,
+		'exp': datetime.utcnow() + app.config['JWT_EXPIRATION_DELTA'],
+		'iat': datetime.utcnow(),
+		'nbf': datetime.utcnow()
+	}
 
 @app.errorhandler(404)
 def page_not_found(error):

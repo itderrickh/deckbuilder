@@ -127,7 +127,7 @@ def seed():
         ses.commit()
 
     if len(ses.query(User).all()) <= 0:
-        u1 = User(name="Derrick Heinemann", username="itderrickh", password=pbkdf2_sha256.hash('itderrickh'),playerid='2548696',dateofbirth=datetime.date(1993, 9, 14))
+        u1 = User(name="Derrick Heinemann", username="itderrickh", password=pbkdf2_sha256.hash('itderrickh'),playerid='2548696',dateofbirth=datetime.date(1993, 9, 14), theme="darkly")
         ses.add(u1)
 
         ses.commit()

@@ -6,6 +6,7 @@ from Models.Card import Card
 from Models.CardSet import CardSet
 from Models.DeckCard import DeckCard
 from Helpers.DeckLib import create_deck_list
+import copy
 
 card_routes = Blueprint('card_routes', __name__,
                         template_folder='templates')
@@ -18,13 +19,12 @@ def getSet(sets, setName):
 def get_cards(deckid):
 	res = ses.query(DeckCard).filter(DeckCard.deckId==deckid).all()
 	dcIds = [r.cardId for r in res]
-	cards = ses.query(Card).filter(Card.Id.in_(dcIds)).all()
+	cards = copy.deepcopy(ses.query(Card).filter(Card.Id.in_(dcIds)).all())
 	sets = ses.query(CardSet).all()
 
 	for card in cards:
 		card.count = next(r.count for r in res if card.Id==r.cardId)
 		if card.type != "Energy":
-			print(card.name)
 			card.setName = getSet(sets, card.setName)
 	return jsonify(Card.serialize_list(cards))
 
@@ -33,7 +33,7 @@ def get_cards(deckid):
 def get_cards_export(deckid):
 	res = ses.query(DeckCard).filter(DeckCard.deckId==deckid).all()
 	dcIds = [r.cardId for r in res]
-	cards = ses.query(Card).filter(Card.Id.in_(dcIds)).all()
+	cards = copy.deepcopy(ses.query(Card).filter(Card.Id.in_(dcIds)).all())
 	sets = ses.query(CardSet).all()
 
 	for card in cards:

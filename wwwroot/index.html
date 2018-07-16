@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="DeckBuilderModule">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Deck Builder</title>
 
-    <link rel="stylesheet" href="./lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" ng-href="./lib/css/bootstrap.base.min.css" />
+    <link rel="stylesheet" ng-href="./lib/css/bootstrap.{{css}}.min.css" />
     <link rel="stylesheet" href="./lib/css/bootstrap-grid.min.css" />
-    <link rel="stylesheet" href="./lib/css/bootstrap-reboot.min.css" />
+    <!--<link rel="stylesheet" href="./lib/css/bootstrap-reboot.min.css" />-->
     <link rel="stylesheet" href="./css/site.css" />
     <script src="./lib/js/fontawesome-all.min.js"></script>
     <script src="./lib/js/jquery-3.3.1.min.js"></script>
@@ -20,7 +21,7 @@
     <script src="./lib/js/autosize.min.js"></script>
     <script src="./lib/js/sweetalert2.min.js"></script>
 </head>
-<body ng-app="DeckBuilderModule">
+<body ng-cloak>
     <nav class="navbar navbar-expand-sm navbar-light bg-primary">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

@@ -11,7 +11,7 @@ pdf_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pdfgen
 def write_to_pdf(cards, user, outputPDF):
     bd = user.dateofbirth
     pokemon = [x for x in cards if x.type == 'Pok\u00e9mon']
-    trainers = [x for x in cards if x.type == 'Trainer Cards']
+    trainers = [x for x in cards if x.type == 'Trainer']
     energy = [x for x in cards if x.type == 'Energy']
     pksum = sum(c.count for c in pokemon)
     tcsum = sum(c.count for c in trainers)

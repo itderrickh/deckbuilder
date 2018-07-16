@@ -22,6 +22,9 @@ deck_routes = Blueprint('deck_routes', __name__,
 def getSet(sets, setCode):
 	return next(s.name for s in sets if s.setName == setCode)
 
+def getSetCode(sets, setName):
+	return next((s.setName for s in sets if s.name == setName), "")
+
 @deck_routes.route("/api/deck/bulk", methods=['POST'])
 @jwt_required()
 def create_deck_bulk():
@@ -105,9 +108,17 @@ def import_limitless_deck():
 @deck_routes.route("/api/deck/exportpdf/<deckid>", methods=['GET'])
 @jwt_required()
 def export_pdf(deckid):
-	res = ses.query(Card).filter(Card.deckId==deckid).all()
+	c1 = ses.query(DeckCard).filter(DeckCard.deckId==deckid).all()
+	dcOneIds = [r.cardId for r in c1]
+	d1 = copy.deepcopy(ses.query(Card).filter(Card.Id.in_(dcOneIds)).all())
+	sets = ses.query(CardSet).all()
+
+	for card in d1:
+		card.count = next(r.count for r in c1 if card.Id==r.cardId)
+		if card.type != "Energy":
+			card.setName = getSetCode(sets, card.setName)
 	uid = str(uuid.uuid4())
-	outfile = write_to_pdf(res, current_identity, uid + '.pdf')
+	outfile = write_to_pdf(d1, current_identity, uid + '.pdf')
 	return jsonify({ 'pdffile': uid }), 201
 
 @deck_routes.route("/api/pdf/<pdfid>", methods=['GET'])

@@ -1,6 +1,6 @@
 from .Serializer import Serializer
 from .ModelBase import Base
-from sqlalchemy import (create_engine, Table, Column, Integer, 
+from sqlalchemy import (create_engine, Table, Column, Integer,
     String, MetaData, ForeignKey, Date)
 import datetime
 
@@ -12,6 +12,7 @@ class User(Base, Serializer):
     password = Column(String)
     playerid = Column(String)
     dateofbirth = Column(Date)
+    theme = Column(String)
 
     def serialize(self):
         d = Serializer.serialize(self)
