@@ -3,8 +3,13 @@
         <h4 class="card-title">Deck Manager</h4>
         <p>Select a deck in the list to view it.</p>
 
-        <label for="deckList">Deck: <select id="deckList" class="custom-select" ng-model="deckCtrl.selectedDeck" ng-options="item.name for item in deckCtrl.decks"></select></label>
-        <button class="btn btn-primary" ng-click="deckCtrl.loadDeck()">View</button>
+        <div ng-if="deckCtrl.decks.length > 0">
+            <label for="deckList">Deck: <select id="deckList" class="custom-select" ng-model="deckCtrl.selectedDeck" ng-options="item.name for item in deckCtrl.decks"></select></label>
+            <button class="btn btn-primary" ng-click="deckCtrl.loadDeck()">View</button>
+        </div>
+        <div ng-if="deckCtrl.decks.length == 0">
+            <h6>You have no decks created. Either <a ng-href="#!import">import</a> decks or <a ng-href="#!create">create</a> a deck to get started!</h6>
+        </div>
     </div>
     <div class="card-block" style="margin-top: 10px" ng-show="deckCtrl.deckData.pokemon.length > 0 || deckCtrl.deckData.trainers.length > 0 || deckCtrl.deckData.energy.length > 0">
         <div class="row">
@@ -23,7 +28,7 @@
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                 <h5>Energy ({{deckCtrl.sum(deckCtrl.deckData.energy, 'count') }})</h5>
                 <ul>
-                    <li ng-repeat="energy in deckCtrl.deckData.energy">{{ energy.count }} - {{ energy.name }} {{ energy.setName }} {{ energy.number }}</li>
+                    <li ng-repeat="energy in deckCtrl.deckData.energy">{{ energy.count }} - {{ energy.name }}</li>
                 </ul>
             </div>
         </div>

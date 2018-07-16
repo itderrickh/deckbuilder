@@ -23,7 +23,9 @@ def get_cards(deckid):
 
 	for card in cards:
 		card.count = next(r.count for r in res if card.Id==r.cardId)
-		card.setName = getSet(sets, card.setName)
+		if card.type != "Energy":
+			print(card.name)
+			card.setName = getSet(sets, card.setName)
 	return jsonify(Card.serialize_list(cards))
 
 @card_routes.route("/api/cards/deck/export/<deckid>", methods=['GET'])
@@ -35,8 +37,9 @@ def get_cards_export(deckid):
 	sets = ses.query(CardSet).all()
 
 	for card in cards:
-		card.count = next(r.count for r in res if card.id==r.cardId)
-		card.setName = getSet(sets, card.setName)
+		card.count = next(r.count for r in res if card.Id==r.cardId)
+		if card.type != "Energy":
+			card.setName = getSet(sets, card.setName)
 	return jsonify({ 'deck': Card.serialize_list(cards), 'text': create_deck_list(cards)})
 
 @card_routes.route("/api/cards", methods=['GET'])

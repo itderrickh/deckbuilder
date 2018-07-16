@@ -12,6 +12,7 @@ from Helpers.Deckmin import get_shared_decklist, print_deck
 import uuid
 import os
 import time
+import copy
 from threading import Thread
 
 pdf_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../pdfgen')
@@ -36,7 +37,7 @@ def create_deck_bulk():
 				value['card'] += " Energy"
 			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
 		else:
-			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8') and Card.setName==getSet(sets, value['set']) and Card.number==value['number']).first()
+			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8'), Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	return jsonify({ }), 204
@@ -44,7 +45,7 @@ def create_deck_bulk():
 @deck_routes.route("/api/decks/<deckid>", methods=['GET'])
 @jwt_required()
 def get_deck(deckid):
-	res = ses.query(Deck).filter(Deck.id==deckid and current_identity.id == Deck.userId).first()
+	res = ses.query(Deck).filter(Deck.id==deckid, current_identity.id == Deck.userId).first()
 	return jsonify(res.serialize())
 
 @deck_routes.route("/api/decks/", methods=['GET'])
@@ -67,9 +68,11 @@ def add_deck():
 		if value['type'] == "Energy":
 			if "Energy" not in value['card']:
 				value['card'] += " Energy"
+			print(value['card'])
 			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
 		else:
-			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8') and Card.setName==getSet(sets, value['set']) and Card.number==value['number']).first()
+			print(value['card'])
+			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8'), Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	ses.commit()
@@ -92,7 +95,7 @@ def import_limitless_deck():
 				value['card'] += " Energy"
 			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
 		else:
-			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8') and Card.setName==getSet(sets, value['set']) and Card.number==value['number']).first()
+			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8'), Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	ses.commit()
@@ -119,19 +122,20 @@ def one_time_pdf(pdfid):
 		return resp
 
 @deck_routes.route("/api/deck/deckmin/<deckOneId>/<deckTwoId>", methods=['GET'])
-@jwt_required()
 def deck_min(deckOneId, deckTwoId):
 	c1 = ses.query(DeckCard).filter(DeckCard.deckId==deckOneId).all()
 	c2 = ses.query(DeckCard).filter(DeckCard.deckId==deckTwoId).all()
+	dcOneIds = [r.cardId for r in c1]
+	dcTwoIds = [r.cardId for r in c2]
 
-	d1 = ses.query(Card).filter(any(x.cardId == Card.Id for x in c1)).all()
-	d2 = ses.query(Card).filter(any(x.cardId == Card.Id for x in c2)).all()
+	d1 = copy.deepcopy(ses.query(Card).filter(Card.Id.in_(dcOneIds)).all())
+	d2 = copy.deepcopy(ses.query(Card).filter(Card.Id.in_(dcTwoIds)).all())
 
 	for card in d1:
-		card.count = (r.count for r in c1 if card.id==r.cardId)
+		card.count = next(r.count for r in c1 if card.Id==r.cardId)
 
 	for card in d2:
-		card.count = (r.count for r in c2 if card.id==r.cardId)
+		card.count = next(r.count for r in c2 if card.Id==r.cardId)
 
 	shared, deck1, deck2 = get_shared_decklist(d1, d2)
 

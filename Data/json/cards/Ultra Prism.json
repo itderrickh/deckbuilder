@@ -6522,7 +6522,7 @@
   },
   {
     "id": "sm5-137",
-    "name": "Unit Energy GrassFireWater",
+    "name": "Unit Energy GFW",
     "imageUrl": "https://images.pokemontcg.io/sm5/137.png",
     "subtype": "Special",
     "supertype": "Energy",
@@ -6539,7 +6539,7 @@
   },
   {
     "id": "sm5-138",
-    "name": "Unit Energy LightningPsychicMetal",
+    "name": "Unit Energy LPM",
     "imageUrl": "https://images.pokemontcg.io/sm5/138.png",
     "subtype": "Special",
     "supertype": "Energy",

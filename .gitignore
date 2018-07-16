@@ -143,3 +143,6 @@ $RECYCLE.BIN/
 # =========================
 
 !wwwroot/lib
+
+deck_builder.db
+deck_builder.db-journal
