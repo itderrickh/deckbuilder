@@ -6,20 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Deck Builder</title>
 
-    <link rel="stylesheet" ng-href="./lib/css/bootstrap.base.min.css" />
+    <link rel="stylesheet" href="./build/css/stylesheet.css" />
     <link rel="stylesheet" ng-href="./lib/css/bootstrap.{{css}}.min.css" />
-    <link rel="stylesheet" href="./lib/css/bootstrap-grid.min.css" />
-    <!--<link rel="stylesheet" href="./lib/css/bootstrap-reboot.min.css" />-->
-    <link rel="stylesheet" href="./css/site.css" />
-    <script src="./lib/js/fontawesome-all.min.js"></script>
-    <script src="./lib/js/jquery-3.3.1.min.js"></script>
-    <script src="./lib/js/bootstrap.min.js"></script>
-    <script src="./lib/js/angular.min.js"></script>
-    <script src="./lib/js/angular-route.min.js"></script>
-    <script src="./lib/js/clipboard.min.js"></script>
-    <script src="./lib/js/ngclipboard.min.js"></script>
-    <script src="./lib/js/autosize.min.js"></script>
-    <script src="./lib/js/sweetalert2.min.js"></script>
+    <script src="./build/js/vendor.js"></script>
 </head>
 <body ng-cloak>
     <nav class="navbar navbar-expand-sm navbar-light bg-primary">
@@ -36,20 +25,23 @@
                 <li class="nav-item" ng-show="!token || token.length == 0">
                     <a class="nav-link" ng-href="#!login">Login</a>
                 </li>
-                <li class="nav-item" ng-show="token.length > 0">
-                    <a class="nav-link" ng-href="#!decks">Decks</a>
+                <li class="nav-item dropdown" ng-show="token.length > 0">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Deck Tools
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" ng-href="#!decks">Decks</a>
+                        <a class="dropdown-item" ng-href="#!import">Import</a>
+                        <a class="dropdown-item" ng-href="#!create">Create</a>
+                        <a class="dropdown-item" ng-href="#!export">Export</a>
+                    </div>
                 </li>
-                <li class="nav-item" ng-show="token.length > 0">
-                    <a class="nav-link" ng-href="#!import">Import</a>
-                </li>
-                <li class="nav-item" ng-show="token.length > 0">
-                    <a class="nav-link" ng-href="#!create">Create</a>
-                </li>
-                <li class="nav-item" ng-show="token.length > 0">
-                    <a class="nav-link" ng-href="#!export">Export</a>
-                </li>
+
                 <li class="nav-item">
                     <a class="nav-link" ng-href="#!draw">Draw Calc</a>
+                </li>
+                <li class="nav-item" ng-show="token.length > 0">
+                    <a class="nav-link" ng-href="#!logout">Logout</a>
                 </li>
             </ul>
         </div>
@@ -63,19 +55,5 @@
     </div>
 
     <script src="./build/js/bundle.js"></script>
-    <!--<script src="./js/app.js"></script>
-    <script src="./js/controllers/mainController.js"></script>
-    <script src="./js/controllers/deckController.js"></script>
-    <script src="./js/controllers/importController.js"></script>
-    <script src="./js/controllers/createController.js"></script>
-    <script src="./js/controllers/exportController.js"></script>
-    <script src="./js/controllers/drawController.js"></script>
-    <script src="./js/controllers/loginController.js"></script>
-    <script src="./js/services/exportService.js"></script>
-    <script src="./js/services/createService.js"></script>
-    <script src="./js/services/importService.js"></script>
-    <script src="./js/services/deckService.js"></script>
-    <script src="./js/services/drawService.js"></script>
-    <script src="./js/services/loginService.js"></script>-->
 </body>
 </html>
