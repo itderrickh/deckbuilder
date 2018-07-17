@@ -1,79 +1,92 @@
 <div class="card" style="padding: 15px;">
-        <div class="card-block">
+    <div style="display: none" class="card-block">
+        <form ng-submit="createCtrl.search()">
             <h4 class="card-title">Create Deck</h4>
-            <p>Create a deck from scratch.</p>
+            <input ng-model="createCtrl.searchField" />
+            <button type="submit">Search</button>
+        </form>
 
-            <div class="form-group">
-                <label for="deckList">Deck Name:</label>
-                <input type="text" class="form-control" ng-model="createCtrl.name" />
+        <div>
+            <div style="display: inline-block; width: 123px; height: 172px;" ng-repeat="hit in createCtrl.searchData.hits.hits">
+                <img style="height: 100%; width: 100%;" ng-src="http://localhost:5000/image-store{{hit._source.localImageUrl}}" />
             </div>
-
-            <div style="margin-bottom: 10px;">
-                <h5>Pokemon - {{createCtrl.count.pokemon}}</h5>
-                <div class="form-inline" style="margin-bottom: 10px;">
-                    <div class="form-group">
-                        <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="createCtrl.form.pokemon.count" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.pokemon.name" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.pokemon.setName" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.pokemon.number" />
-                        <button ng-click="createCtrl.addCard('pokemon')" class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-plus"></i></button>
-                    </div>
-                </div>
-                <div class="form-inline" style="margin-bottom: 10px;" ng-show="createCtrl.cards.pokemon.length > 0" ng-repeat="newCard in createCtrl.cards.pokemon">
-                    <div class="form-group">
-                        <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="newCard.count" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.name" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.setName" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.number" />
-                        <button ng-click="createCtrl.removeCard('pokemon', newCard)" class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-minus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 10px;">
-                <h5>Trainers - {{createCtrl.count.trainer}}</h5>
-                <div class="form-inline" style="margin-bottom: 10px;">
-                    <div class="form-group">
-                        <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="createCtrl.form.trainer.count" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.trainer.name" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.trainer.setName" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.trainer.number" />
-                        <button ng-click="createCtrl.addCard('trainer')" class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-plus"></i></button>
-                    </div>
-                </div>
-                <div class="form-inline" style="margin-bottom: 10px;" ng-show="createCtrl.cards.trainer.length > 0" ng-repeat="newCard in createCtrl.cards.trainer">
-                    <div class="form-group">
-                        <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="newCard.count" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.name" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.setName" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.number" />
-                        <button ng-click="createCtrl.removeCard('trainer', newCard)" class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-minus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 10px;">
-                <h5>Energy - {{createCtrl.count.energy}}</h5>
-                <div class="form-inline" style="margin-bottom: 10px;">
-                    <div class="form-group">
-                        <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="createCtrl.form.energy.count" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.energy.name" />
-                        <!--<label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.energy.setName" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.energy.number" />-->
-                        <button ng-click="createCtrl.addCard('energy')" class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-plus"></i></button>
-                    </div>
-                </div>
-                <div class="form-inline" style="margin-bottom: 10px;" ng-show="createCtrl.cards.energy.length > 0" ng-repeat="newCard in createCtrl.cards.energy">
-                    <div class="form-group">
-                        <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="newCard.count" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.name" />
-                        <!--<label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.setName" />
-                        <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.number" />-->
-                        <button ng-click="createCtrl.removeCard('energy', newCard)"class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-minus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <button class="btn btn-primary" ng-click="createCtrl.submitForm()">Submit</button>
         </div>
     </div>
+    <div class="card-block">
+        <h4 class="card-title">Create Deck</h4>
+        <p>Create a deck from scratch.</p>
+
+        <div class="form-group">
+            <label for="deckList">Deck Name:</label>
+            <input type="text" class="form-control" ng-model="createCtrl.name" />
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <h5>Pokemon - {{createCtrl.count.pokemon}}</h5>
+            <div class="form-inline" style="margin-bottom: 10px;">
+                <div class="form-group">
+                    <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="createCtrl.form.pokemon.count" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.pokemon.name" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.pokemon.setName" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.pokemon.number" />
+                    <button ng-click="createCtrl.addCard('pokemon')" class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <div class="form-inline" style="margin-bottom: 10px;" ng-show="createCtrl.cards.pokemon.length > 0" ng-repeat="newCard in createCtrl.cards.pokemon">
+                <div class="form-group">
+                    <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="newCard.count" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.name" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.setName" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.number" />
+                    <button ng-click="createCtrl.removeCard('pokemon', newCard)" class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <h5>Trainers - {{createCtrl.count.trainer}}</h5>
+            <div class="form-inline" style="margin-bottom: 10px;">
+                <div class="form-group">
+                    <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="createCtrl.form.trainer.count" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.trainer.name" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.trainer.setName" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.trainer.number" />
+                    <button ng-click="createCtrl.addCard('trainer')" class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <div class="form-inline" style="margin-bottom: 10px;" ng-show="createCtrl.cards.trainer.length > 0" ng-repeat="newCard in createCtrl.cards.trainer">
+                <div class="form-group">
+                    <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="newCard.count" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.name" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.setName" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.number" />
+                    <button ng-click="createCtrl.removeCard('trainer', newCard)" class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <h5>Energy - {{createCtrl.count.energy}}</h5>
+            <div class="form-inline" style="margin-bottom: 10px;">
+                <div class="form-group">
+                    <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="createCtrl.form.energy.count" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.energy.name" />
+                    <!--<label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.energy.setName" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="createCtrl.form.energy.number" />-->
+                    <button ng-click="createCtrl.addCard('energy')" class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <div class="form-inline" style="margin-bottom: 10px;" ng-show="createCtrl.cards.energy.length > 0" ng-repeat="newCard in createCtrl.cards.energy">
+                <div class="form-group">
+                    <label style="margin-right: 5px; margin-left: 5px;">Count: </label><input type="number" class="form-control form-control-sm" ng-model="newCard.count" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Name: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.name" />
+                    <!--<label style="margin-right: 5px; margin-left: 5px;">Set: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.setName" />
+                    <label style="margin-right: 5px; margin-left: 5px;">Number: </label><input type="text" class="form-control form-control-sm" ng-model="newCard.number" />-->
+                    <button ng-click="createCtrl.removeCard('energy', newCard)"class="btn btn-primary" style="margin-right: 5px; margin-left: 5px;"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" ng-click="createCtrl.submitForm()">Submit</button>
+    </div>
+</div>

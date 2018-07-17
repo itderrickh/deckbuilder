@@ -148,3 +148,5 @@ deck_builder.db
 deck_builder.db-journal
 
 node_modules/
+wwwroot/image-store/*
+!wwwroot/image-store/.gitkeep

@@ -1,5 +1,14 @@
 app.service('CreateService', ['$http', '$rootScope', function($http, $rootScope) {
     return {
+        search: function(data) {
+            return $http({
+                method: 'GET',
+                url: 'http://localhost:5000/api/cards/search/' + data,
+                headers: {
+                    'Authorization': 'JWT ' + $rootScope.token
+                }
+            });
+        },
         createDeck: function(data) {
             return $http({
                 method: 'POST',

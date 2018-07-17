@@ -1,4 +1,4 @@
-from AppState.Session import ses
+from AppState.Session import ses, ElasticStore
 from Models.ModelBase import Base, JSONType
 from Models.Card import Card
 from Models.Deck import Deck
@@ -14,34 +14,13 @@ import glob
 Base.metadata.bind = Engine
 Base.metadata.create_all()
 
-def seed():
-    if(len(ses.query(Card).all()) <= 0):
-        for item in glob.glob('./Data/json/cards/*'):
-            print(item)
-            with open(item, encoding="utf8") as f:
-                data = json.load(f)
-                for d in data:
-                    ses.add(
-                        Card(
-                            name=d['name'].encode('UTF-8'),
-                            subtype=d.get('subtype'),
-                            type=d.get('supertype'),
-                            evolvesFrom=d.get('evolvesFrom', '').encode('UTF-8'),
-                            ability=d.get('ability'),
-                            hp=int(d.get('hp') if str(d.get('hp')) != "None" else 0),
-                            retreatCost=d.get('convertedRetreatCost'),
-                            artist=d['artist'],
-                            rarity=d.get('rarity'),
-                            setName=d['series'] + " - " + d['set'],
-                            types=d.get('types'),
-                            attacks=d.get('attacks'),
-                            weaknesses=d.get('weaknesses'),
-                            number=d['number']))
-        ses.commit()
+def getSet(sets, setName):
+	return next((s.setName for s in sets if s.name == setName), "")
 
+def seed():
     if len(ses.query(CardSet).all()) <= 0:
         s1 = CardSet(name="XY - Kalos Starter Set", setName="KSS", standard=False)
-        s2 = CardSet(name="XY", setName="XY", standard=False)
+        s2 = CardSet(name="XY - XY", setName="XY", standard=False)
         s3 = CardSet(name="XY - Flashfire", setName="FLF", standard=False)
         s4 = CardSet(name="XY - Furious Fists", setName="FFI", standard=False)
         s5 = CardSet(name="XY - Phantom Forces", setName="PHF", standard=False)
@@ -56,7 +35,7 @@ def seed():
         s41 = CardSet(name="XY - Evolutions", setName="EVO", standard=True)
 
         s14 = CardSet(name="XY - Generations", setName="GEN", standard=True)
-        s15 = CardSet(name="XY Trainer Kit", setName="TK", standard=True)
+        s15 = CardSet(name="XY - XY Trainer Kit", setName="TK", standard=True)
         s16 = CardSet(name="Sun & Moon - Sun & Moon", setName="SUM", standard=True)
         s17 = CardSet(name="Sun & Moon - Guardians Rising", setName="GRI", standard=True)
         s18 = CardSet(name="Sun & Moon - Burning Shadows", setName="BUS", standard=True)
@@ -124,6 +103,37 @@ def seed():
         ses.add(s39)
         ses.add(s40)
         ses.add(s41)
+        ses.commit()
+
+    sets = ses.query(CardSet).all()
+
+    if(len(ses.query(Card).all()) <= 0):
+        ElasticStore.indices.delete(index='card-index')
+        for item in glob.glob('./Data/json/cards/*'):
+            print(item)
+            with open(item, encoding="utf8") as f:
+                data = json.load(f)
+                for d in data:
+                    card = Card(
+                        name=d['name'].encode('UTF-8'),
+                        subtype=d.get('subtype'),
+                        type=d.get('supertype'),
+                        evolvesFrom=d.get('evolvesFrom', '').encode('UTF-8'),
+                        ability=d.get('ability'),
+                        hp=int(d.get('hp') if str(d.get('hp')) != "None" else 0),
+                        retreatCost=d.get('convertedRetreatCost'),
+                        artist=d['artist'],
+                        rarity=d.get('rarity'),
+                        setName=d['series'] + " - " + d['set'],
+                        setCode=d['setCode'],
+                        types=d.get('types'),
+                        localImageUrl="/" + d['setCode'] + "/" + d.get('number') + ".png",
+                        imageUrl=d.get('imageUrl'),
+                        attacks=d.get('attacks'),
+                        weaknesses=d.get('weaknesses'),
+                        number=d['number'])
+                    ses.add(card)
+                    ElasticStore.index(index="card-index", doc_type='card', id=card.Id, body=card.serialize())
         ses.commit()
 
     if len(ses.query(User).all()) <= 0:

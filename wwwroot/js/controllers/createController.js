@@ -1,10 +1,25 @@
 app.controller('CreateController', ['CreateService', function(createService) {
     var createCtrl = this;
+    createCtrl.searchField = "";
     createCtrl.name = '';
     createCtrl.count = {
         pokemon: 0,
         trainer: 0,
         energy: 0
+    };
+
+    createCtrl.searchData = {};
+    createCtrl.deckData = {};
+
+    createCtrl.newAdd = function(card) {
+        createCtrl.deckData.push(card);
+    };
+
+    createCtrl.newRemove = function(card) {
+        var index = createCtrl.deckData.indexOf(card);
+        if(index > -1) {
+            createCtrl.deckData.splice(index, 1);
+        }
     };
 
     createCtrl.form = {
@@ -31,6 +46,12 @@ app.controller('CreateController', ['CreateService', function(createService) {
             createCtrl.count[listName] -= createCtrl.cards[listName][index].count;
             createCtrl.cards[listName].splice(index, 1);
         }
+    };
+
+    createCtrl.search = function() {
+        createService.search(createCtrl.searchField).then(function(response) {
+            createCtrl.searchData = response.data;
+        })
     };
 
     createCtrl.submitForm = function() {
@@ -64,7 +85,7 @@ app.controller('CreateController', ['CreateService', function(createService) {
                             'success'
                         )
                     });
-                    
+
                 }
             })
         } else {

@@ -1,11 +1,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import String, TypeDecorator, VARCHAR
+from elasticsearch import Elasticsearch
 import json
 
 Engine = create_engine('sqlite:///deck_builder.db')
 
 Session = sessionmaker(bind=Engine)
+ElasticStore = Elasticsearch()
 ses = Session()
 
 class JSONType(TypeDecorator):

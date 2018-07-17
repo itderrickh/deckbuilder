@@ -20,6 +20,9 @@ class Card(Base, Serializer):
     evolvesTo = Column(JSONType)
     ability = Column(JSONType)
     setName = Column(String)
+    setCode = Column(String)
+    imageUrl = Column(String)
+    localImageUrl = Column(String)
     type = Column(String)   #supertype
     number = Column(String)
     count = 0
