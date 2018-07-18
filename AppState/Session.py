@@ -1,6 +1,5 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, String, TypeDecorator, VARCHAR
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import String, TypeDecorator, VARCHAR
 from elasticsearch import Elasticsearch
 import json
 

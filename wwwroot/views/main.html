@@ -1,3 +1,21 @@
-<div>
-    {{ mainCtrl.message }}
+<div class="row">
+    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"></div>
+    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" style="margin-top: 10px">
+        Content
+    </div>
+    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+        <h4>Upcoming Events: </h4>
+        <table>
+            <tr>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Location</th>
+            </tr>
+            <tr ng-repeat="event in mainCtrl.events">
+                <td>{{event.name}}</td>
+                <td>{{event.date | date : 'MM/dd/yyyy @ h:mma'}}</td>
+                <td>{{event.location}}</td>
+            </tr>
+        </table>
+    </div>
 </div>

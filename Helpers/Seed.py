@@ -5,6 +5,7 @@ from Models.Deck import Deck
 from Models.DeckCard import DeckCard
 from Models.User import User
 from Models.CardSet import CardSet
+from Models.Event import Event
 from AppState.Session import Engine
 from passlib.hash import pbkdf2_sha256
 import datetime

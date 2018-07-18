@@ -22,8 +22,14 @@
         <!-- Links -->
         <div class="collapse navbar-collapse" style="justify-content: flex-end">
             <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" ng-href="#!">Home</a>
+                </li>
                 <li class="nav-item" ng-show="!token || token.length == 0">
                     <a class="nav-link" ng-href="#!login">Login</a>
+                </li>
+                <li class="nav-item" ng-show="!token || token.length == 0">
+                    <a class="nav-link" ng-href="#!register">Register</a>
                 </li>
                 <li class="nav-item dropdown" ng-show="token.length > 0">
                     <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

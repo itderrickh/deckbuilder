@@ -16,6 +16,7 @@ from Routes.CardRoutes import card_routes
 from Routes.DrawRoutes import draw_routes
 from Routes.StaticRoutes import static_routes
 from Routes.SetRoutes import set_routes
+from Routes.UtilityRoutes import util_routes
 
 app = Flask(__name__, static_folder = './wwwroot')
 app.config['SECRET_KEY'] = 'super-secret'
@@ -51,6 +52,26 @@ def page_not_found(error):
 	print(error)
 	return jsonify({ 'message': 'Error', 'error': str(error) }), 404
 
+@app.route('/api/register', methods=['POST'])
+def register():
+	content = request.get_json()
+
+	if(ses.query(User).filter(User.username==content['username']).count() > 0):
+		return jsonify({ 'error': 'This user already exists. Please enter a new username.'}), 500
+	else:
+		user = User(
+			name=content['name'],
+			username=content['username'],
+			password=pbkdf2_sha256.hash(content['password']),
+			playerid=content['playerid'],
+			dateofbirth=datetime.strptime(content['dateofbirth'], "%Y-%m-%dT%H:%M:%S.%fZ" ),
+			theme=content['theme']
+		)
+
+		ses.add(user)
+		ses.commit()
+		return jsonify({ 'message': 'User successfully created. Please login to continue.' })
+
 @app.route('/api/help', methods = ['GET'])
 def help():
     """Print available functions."""
@@ -65,6 +86,7 @@ app.register_blueprint(set_routes)
 app.register_blueprint(card_routes)
 app.register_blueprint(deck_routes)
 app.register_blueprint(draw_routes)
+app.register_blueprint(util_routes)
 
 if __name__ == '__main__':
 	app.run()

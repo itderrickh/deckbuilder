@@ -96,9 +96,11 @@ def import_limitless_deck():
 		if value['type'] == "Energy":
 			if "Energy" not in value['card']:
 				value['card'] += " Energy"
+			print(value['card'])
 			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
 		else:
 			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8'), Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
+			print(value['card'])
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	ses.commit()

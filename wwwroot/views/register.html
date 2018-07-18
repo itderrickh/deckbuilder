@@ -1,0 +1,50 @@
+<div class="card" style="padding: 15px;">
+		<div class="card-block">
+			<form ng-submit="regCtrl.submit()">
+				<h4 class="card-title">Register</h4>
+				<p>Enter information here to register.</p>
+
+				<div class="form-group">
+					<label for="">Name</label>
+					<input type="text" class="form-control" ng-model="regCtrl.name" placeholder="">
+				</div>
+				<div class="form-group">
+						<label for="">Date of Birth (for age division)</label>
+						<input type="date" class="form-control" ng-model="regCtrl.dob" placeholder="">
+					</div>
+				<div class="form-group">
+					<label for="">Username</label>
+					<input type="text" class="form-control" ng-model="regCtrl.username" placeholder="">
+				</div>
+				<div class="form-group">
+					<label for="">Password</label>
+					<input type="password" class="form-control" ng-model="regCtrl.password" placeholder="">
+				</div>
+				<div class="form-group">
+					<label for="">Password (confirm)</label>
+					<input type="password" class="form-control" ng-model="regCtrl.passwordConfirm" placeholder="">
+				</div>
+				<div class="form-group">
+					<label for="">Player Id</label>
+					<input type="text" class="form-control" ng-model="regCtrl.playerId" placeholder="">
+				</div>
+				<div class="form-group">
+						<label for="">Theme</label>
+						<select class="form-control" ng-change="regCtrl.changeTheme()" ng-model="regCtrl.theme">
+							<option>base</option>
+							<option>darkly</option>
+							<option>minty</option>
+							<option>pulse</option>
+							<option>solar</option>
+							<option>ubuntu</option>
+						</select>
+					</div>
+				<small id="helpId" class="form-text text-muted" ng-show="regCtrl.message.length > 0">{{regCtrl.message}}</small>
+
+				<div>
+					<button class="btn btn-primary" type="submit">Register</button>
+				</div>
+			</form>
+
+		</div>
+	</div>

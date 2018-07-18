@@ -69,6 +69,11 @@ app.config(['$routeProvider', function ($routeProvider) {
             controller: "MainController",
             controllerAs: "mainCtrl"
         })
+        .when("/register", {
+            templateUrl: "./views/register.html",
+            controller: "RegisterController",
+            controllerAs: "regCtrl"
+        })
         .when("/decks", {
             templateUrl: "./views/decks.html",
             controller: "DeckController",

@@ -2896,7 +2896,7 @@
   },
   {
     "id": "sm5-58",
-    "name": "Giratina ◇",
+    "name": "Giratina Prism Star",
     "imageUrl": "https://images.pokemontcg.io/sm5/58.png",
     "subtype": "Basic",
     "supertype": "Pokémon",
@@ -3095,7 +3095,7 @@
   },
   {
     "id": "sm5-62",
-    "name": "Lunala ◇",
+    "name": "Lunala Prism Star",
     "imageUrl": "https://images.pokemontcg.io/sm5/62.png",
     "subtype": "Basic",
     "supertype": "Pokémon",
@@ -3916,7 +3916,7 @@
   },
   {
     "id": "sm5-77",
-    "name": "Darkrai ◇",
+    "name": "Darkrai Prism Star",
     "imageUrl": "https://images.pokemontcg.io/sm5/77.png",
     "subtype": "Basic",
     "supertype": "Pokémon",
@@ -4600,7 +4600,7 @@
   },
   {
     "id": "sm5-89",
-    "name": "Solgaleo ◇",
+    "name": "Solgaleo Prism Star",
     "imageUrl": "https://images.pokemontcg.io/sm5/89.png",
     "subtype": "Basic",
     "supertype": "Pokémon",
@@ -6231,7 +6231,7 @@
   },
   {
     "id": "sm5-120",
-    "name": "Cyrus ◇",
+    "name": "Cyrus Prism Star",
     "imageUrl": "https://images.pokemontcg.io/sm5/120.png",
     "subtype": "Supporter",
     "supertype": "Trainer",
@@ -6504,7 +6504,7 @@
   },
   {
     "id": "sm5-136",
-    "name": "Super Boost Energy ◇",
+    "name": "Super Boost Energy Prism Star",
     "imageUrl": "https://images.pokemontcg.io/sm5/136.png",
     "subtype": "Special",
     "supertype": "Energy",

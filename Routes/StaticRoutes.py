@@ -2,7 +2,7 @@ from flask import Flask, request, send_from_directory, Response, Blueprint
 import os
 
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../wwwroot')
-print(static_file_dir)
+
 static_routes = Blueprint('static_routes', __name__,
                         template_folder='templates')
 
