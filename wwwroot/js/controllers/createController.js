@@ -2,6 +2,7 @@ app.controller('CreateController', ['CreateService', function(createService) {
     var createCtrl = this;
     createCtrl.searchField = "";
     createCtrl.name = '';
+    createCtrl.largeUrl = '';
     createCtrl.count = {
         pokemon: 0,
         trainer: 0,
@@ -9,7 +10,7 @@ app.controller('CreateController', ['CreateService', function(createService) {
     };
 
     createCtrl.searchData = {};
-    createCtrl.deckData = {};
+    createCtrl.deckData = [];
 
     createCtrl.newAdd = function(card) {
         createCtrl.deckData.push(card);
@@ -20,6 +21,24 @@ app.controller('CreateController', ['CreateService', function(createService) {
         if(index > -1) {
             createCtrl.deckData.splice(index, 1);
         }
+    };
+
+    createCtrl.newSubmit = function() {
+        var deck = [];
+        for(var i = 0; i < createCtrl.deckData.length; i++) {
+            deck.push(createCtrl.deckData[i]._source.Id);
+        }
+        
+        createService.createDeck({
+            'name': createCtrl.name,
+            'deck': deck
+        }).then(function(response) {
+            swal(
+                'Submitted!',
+                'Your deck ' + createCtrl.name + ' has been submitted',
+                'success'
+            )
+        });
     };
 
     createCtrl.form = {
@@ -34,6 +53,13 @@ app.controller('CreateController', ['CreateService', function(createService) {
         energy: []
     };
 
+    createCtrl.search = function() {
+        createService.search(createCtrl.searchField).then(function(response) {
+            createCtrl.searchData = response.data;
+        })
+    };
+
+    /*
     createCtrl.addCard = function(listName) {
         createCtrl.cards[listName].push(angular.copy(createCtrl.form[listName]));
         createCtrl.count[listName] += createCtrl.form[listName].count;
@@ -46,12 +72,6 @@ app.controller('CreateController', ['CreateService', function(createService) {
             createCtrl.count[listName] -= createCtrl.cards[listName][index].count;
             createCtrl.cards[listName].splice(index, 1);
         }
-    };
-
-    createCtrl.search = function() {
-        createService.search(createCtrl.searchField).then(function(response) {
-            createCtrl.searchData = response.data;
-        })
     };
 
     createCtrl.submitForm = function() {
@@ -98,5 +118,5 @@ app.controller('CreateController', ['CreateService', function(createService) {
                 alert('Completed');
             });
         }
-    };
+    };*/
 }]);

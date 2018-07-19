@@ -64,7 +64,7 @@ DOWNLOADS_DIR = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 
 
 @card_routes.route("/api/cards/search/<name>", methods=['GET'])
 def search_by_name(name):
-	res = ElasticStore.search(index="card-index", body={"query": {"match_phrase_prefix": { "name": name }}})
+	res = ElasticStore.search(index="card-index", body={"size": 50, "query": {"match_phrase_prefix": { "name": name }}})
 	myopener = MyOpener()
 
 	#Download files if we don't have them already

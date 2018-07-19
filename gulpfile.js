@@ -42,6 +42,6 @@ gulp.task('pack-css', function () {
 		.pipe(gulp.dest('wwwroot/build/css'));
 });
 
-gulp.task('flask', ['pack-js', 'pack-vendor-js', 'pack-css'], shell.task(['flask run']));
+gulp.task('flask', ['pack-js', 'pack-vendor-js', 'pack-css'], shell.task(['python -m flask run']));
 
 gulp.task('default', ['flask']);

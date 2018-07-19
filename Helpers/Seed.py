@@ -134,6 +134,7 @@ def seed():
                         weaknesses=d.get('weaknesses'),
                         number=d['number'])
                     ses.add(card)
+                    ses.flush()
                     ElasticStore.index(index="card-index", doc_type='card', id=card.Id, body=card.serialize())
         ses.commit()
 

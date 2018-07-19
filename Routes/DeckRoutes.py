@@ -25,6 +25,26 @@ def getSet(sets, setCode):
 def getSetCode(sets, setName):
 	return next((s.setName for s in sets if s.name == setName), "")
 
+#@deck_routes.route("/api/deck/bulk", methods=['POST'])
+#@jwt_required()
+#def create_deck_bulk():
+	#content = request.get_json()
+	#deck = Deck(name=content['name'], userId=current_identity.id)
+	#sets = ses.query(CardSet).all()
+	#ses.add(deck)
+	#ses.commit()
+
+	#for value in content['deck']:
+	#	if value['type'] == "Energy":
+	#		if "Energy" not in value['card']:
+	#			value['card'] += " Energy"
+	#		card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
+	#	else:
+	#		card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8'), Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
+	#	ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
+
+	#return jsonify({ }), 204
+
 @deck_routes.route("/api/deck/bulk", methods=['POST'])
 @jwt_required()
 def create_deck_bulk():
@@ -34,14 +54,9 @@ def create_deck_bulk():
 	ses.add(deck)
 	ses.commit()
 
-	for value in content['deck']:
-		if value['type'] == "Energy":
-			if "Energy" not in value['card']:
-				value['card'] += " Energy"
-			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
-		else:
-			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8'), Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
-		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
+	cards = {x:content['deck'].count(x) for x in content['deck']}
+	for value in cards.keys():
+		ses.add(DeckCard(deckId=deck.id,cardId=value,count=cards[value]))
 
 	return jsonify({ }), 204
 

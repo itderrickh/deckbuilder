@@ -8,34 +8,47 @@ app.service('tokenToUser', [function() {
 }]);
 
 app.factory('authHttpResponseInterceptor', ['$q', '$location', '$rootScope', function ($q, $location, $rootScope) {
-        return {
-            response: function (response) {
-                if (response.status === 401) {
-                    console.log("Response 401");
-                }
-                return response || $q.when(response);
-            },
-            responseError: function (rejection) {
-                if (rejection.status === 401) {
-                    var oldpath = $location.path();
-
-                    if(rejection.data && rejection.data.description === "Signature has expired") {
-                        $rootScope.token = null;
-                        $rootScope.user = null;
-                        $rootScope.css = "base";
-                        localStorage.removeItem('token');
-                    }
-
-                    $location.path('/login');
-                }
-                return $q.reject(rejection);
+    return {
+        response: function (response) {
+            if (response.status === 401) {
+                console.log("Response 401");
             }
+            return response || $q.when(response);
+        },
+        responseError: function (rejection) {
+            if (rejection.status === 401) {
+                var oldpath = $location.path();
+
+                if(rejection.data && rejection.data.description === "Signature has expired") {
+                    $rootScope.token = null;
+                    $rootScope.user = null;
+                    $rootScope.css = "base";
+                    localStorage.removeItem('token');
+                }
+
+                $location.path('/login');
+            }
+            return $q.reject(rejection);
         }
-    }])
-    .config(['$httpProvider', function ($httpProvider) {
-        //Http Intercpetor to check auth failures for xhr requests
-        $httpProvider.interceptors.push('authHttpResponseInterceptor');
-    }]);
+    }
+}]);
+
+app.config(['$httpProvider', function ($httpProvider) {
+    //Http Intercpetor to check auth failures for xhr requests
+    $httpProvider.interceptors.push('authHttpResponseInterceptor');
+}]);
+
+app.directive('ngRightClick', ['$parse', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.ngRightClick);
+        element.bind('contextmenu', function(event) {
+            scope.$apply(function() {
+                event.preventDefault();
+                fn(scope, {$event:event});
+            });
+        });
+    };
+}]);
 
 app.run(['$rootScope', '$location', '$http', 'tokenToUser', function ($rootScope, $location, $http, tokenToUser) {
     $rootScope.css = "base";

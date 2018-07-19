@@ -1,18 +1,36 @@
 <div class="card" style="padding: 15px;">
-    <div style="display: none" class="card-block">
+    <div class="card-block">
+        <h4 class="card-title">Create Deck</h4>
+        <div style="margin-bottom: 20px;">
+            <div class="form-group">
+                <label for="deckList">Deck Name:</label>
+                <input type="text" class="form-control" ng-model="createCtrl.name" />
+            </div>
+            <div>
+                Card Count: {{createCtrl.deckData.length}}
+            </div>
+            <div style="display: inline-block; width: 64px; height: 86px;" ng-repeat="d in createCtrl.deckData track by $index">
+                <img style="height: 100%; width: 100%;" ng-click="createCtrl.newRemove(d)" ng-src="http://localhost:5000/image-store{{d._source.localImageUrl}}" />
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="btn btn-primary" ng-disabled="createCtrl.deckData.length < 60" ng-click="createCtrl.newSubmit()">Submit</button>
+            </div>
+        </div>
         <form ng-submit="createCtrl.search()">
-            <h4 class="card-title">Create Deck</h4>
-            <input ng-model="createCtrl.searchField" />
-            <button type="submit">Search</button>
+            <input class="form-control" ng-model="createCtrl.searchField" />
+            <button class="btn btn-primary" type="submit">Search</button>
         </form>
 
         <div>
+            <div ng-if="createCtrl.largeUrl !== ''" style="width: 384px; height: 516px; position: absolute; left: 0; right: 0;top: 0; bottom: 0; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;">
+                <img style="height: 100%; width: 100%;" ng-click="createCtrl.largeUrl = ''" ng-src="http://localhost:5000/image-store{{createCtrl.largeUrl}}" />
+            </div>
             <div style="display: inline-block; width: 123px; height: 172px;" ng-repeat="hit in createCtrl.searchData.hits.hits">
-                <img style="height: 100%; width: 100%;" ng-src="http://localhost:5000/image-store{{hit._source.localImageUrl}}" />
+                <img style="height: 100%; width: 100%;" ng-right-click="createCtrl.largeUrl = hit._source.localImageUrl" ng-click="createCtrl.newAdd(hit)" ng-src="http://localhost:5000/image-store{{hit._source.localImageUrl}}" />
             </div>
         </div>
     </div>
-    <div class="card-block">
+    <div style="display: none" class="card-block">
         <h4 class="card-title">Create Deck</h4>
         <p>Create a deck from scratch.</p>
 
