@@ -52,6 +52,11 @@ def page_not_found(error):
 	print(error)
 	return jsonify({ 'message': 'Error', 'error': str(error) }), 404
 
+@app.errorhandler(500)
+def error_handler(error):
+	print(error)
+	return jsonify({ 'message': 'Error', 'error': str(error) }), 500
+
 @app.route('/api/register', methods=['POST'])
 def register():
 	content = request.get_json()

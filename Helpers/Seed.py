@@ -47,7 +47,7 @@ def seed():
         s21 = CardSet(name="Sun & Moon - Shining Legends", setName="SLG", standard=True)
         s22 = CardSet(name="Sun & Moon Trainer Kit", setName="TK", standard=True)
         s23 = CardSet(name="BW - BW Black Star Promos", setName="PR-BW", standard=False)
-        s24 = CardSet(name="XY - XY Black Star Promos", setName="PR-XY", standard=False)
+        s24 = CardSet(name="XY - XY Black Star Promos", setName="PR-XY", standard=True)
         s26 = CardSet(name="SM - SM Black Star Promos", setName="PR-SM", standard=True)
         s27 = CardSet(name="McDonald's Collection", setName="MCD", standard=True)
 

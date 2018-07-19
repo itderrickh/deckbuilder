@@ -24,6 +24,8 @@ gulp.task('pack-vendor-js', function () {
 			'wwwroot/lib/js/angular.min.js',
 			'wwwroot/lib/js/angular-route.js',
 			'wwwroot/lib/js/angucomplete-alt.min.js',
+			//'wwwroot/lib/js/spin.js',
+			//'wwwroot/lib/js/angular-spinner.min.js',
 			'wwwroot/lib/js/bootstrap.min.js',
 			'wwwroot/lib/js/clipboard.min.js',
 			'wwwroot/lib/js/fontawesome-all.min.js',

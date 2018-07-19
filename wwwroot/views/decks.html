@@ -5,31 +5,43 @@
 
         <div ng-if="deckCtrl.decks.length > 0">
             <label for="deckList">Deck: <select id="deckList" class="custom-select" ng-model="deckCtrl.selectedDeck" ng-options="item.name for item in deckCtrl.decks"></select></label>
-            <button class="btn btn-primary" ng-click="deckCtrl.loadDeck()">View</button>
+            <button class="btn btn-primary" ng-click="deckCtrl.loadDeck(false)">View</button>
+            <button class="btn btn-primary" ng-click="deckCtrl.loadDeck(true)">View Images</button>
         </div>
         <div ng-if="deckCtrl.decks.length == 0">
             <h6>You have no decks created. Either <a ng-href="#!import">import</a> decks or <a ng-href="#!create">create</a> a deck to get started!</h6>
         </div>
     </div>
     <div class="card-block" style="margin-top: 10px" ng-show="deckCtrl.deckData.pokemon.length > 0 || deckCtrl.deckData.trainers.length > 0 || deckCtrl.deckData.energy.length > 0">
-        <div class="row">
+        <div class="row" ng-show="!deckCtrl.imageShow">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                 <h5>Pok&#233;mon ({{deckCtrl.sum(deckCtrl.deckData.pokemon, 'count') }})</h5>
                 <ul>
-                    <li ng-repeat="pokemon in deckCtrl.deckData.pokemon">{{ pokemon.count }} - {{ pokemon.name }} {{ pokemon.setName }} {{ pokemon.number }}</li>
+                    <li ng-repeat="pokemon in deckCtrl.deckData.pokemon">
+                        <span>{{ pokemon.count }} - {{ pokemon.name }} {{ pokemon.setName }} {{ pokemon.number }}</span>
+                    </li>
                 </ul>
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                 <h5>Trainer Cards ({{deckCtrl.sum(deckCtrl.deckData.trainers, 'count') }})</h5>
                 <ul>
-                    <li ng-repeat="trainer in deckCtrl.deckData.trainers">{{ trainer.count }} - {{ trainer.name }} {{ trainer.setName }} {{ trainer.number }}</li>
+                    <li ng-repeat="trainer in deckCtrl.deckData.trainers">
+                        <span>{{ trainer.count }} - {{ trainer.name }} {{ trainer.setName }} {{ trainer.number }}</span>
+                    </li>
                 </ul>
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                 <h5>Energy ({{deckCtrl.sum(deckCtrl.deckData.energy, 'count') }})</h5>
                 <ul>
-                    <li ng-repeat="energy in deckCtrl.deckData.energy">{{ energy.count }} - {{ energy.name }}</li>
+                    <li ng-repeat="energy in deckCtrl.deckData.energy">
+                        <span>{{ energy.count }} - {{ energy.name }}</span>
+                    </li>
                 </ul>
+            </div>
+        </div>
+        <div class="row" ng-show="deckCtrl.imageShow">
+            <div ng-repeat="card in deckCtrl.imageDeckList() track by $index">
+                <img style="display: inline-block; width: 123px; height: 172px;" ng-src="http://localhost:5000/image-store{{card.localImageUrl}}" />
             </div>
         </div>
     </div>
