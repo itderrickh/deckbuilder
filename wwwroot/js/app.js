@@ -115,6 +115,11 @@ app.config(['$routeProvider', function ($routeProvider) {
             templateUrl: "./views/draw.html",
             controller: "DrawController",
             controllerAs: "drawCtrl"
+        }).when("/upload", {
+            templateUrl: "./views/upload.html",
+            controller: "UploadController",
+            controllerAs: "uploadCtrl",
+            resolve: resolve
         }).when("/logout", {
             resolve: {
                 logout: function ($rootScope) {
