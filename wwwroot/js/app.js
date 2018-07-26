@@ -21,8 +21,9 @@ app.factory('authHttpResponseInterceptor', ['$q', '$location', '$rootScope', fun
 
                 new Noty({
                     theme: 'bootstrap-v4',
-                    text: 'Authorization has expired. Please log-in to continue.',
+                    text: 'Authorization has expired or is invalid. Please log-in to continue.',
                     type: 'error',
+                    layout: 'bottomCenter',
                     timeout: 3000
                 }).show();
 
