@@ -31,6 +31,7 @@ gulp.task('pack-vendor-js', function () {
 			'wwwroot/lib/js/fontawesome-all.min.js',
 			'wwwroot/lib/js/ngclipboard.min.js',
 			'wwwroot/lib/js/sweetalert2.min.js',
+			'wwwroot/lib/js/noty.min.js',
 			'wwwroot/lib/js/autosize.min.js'
 		], { base: './' }))
 		.pipe(concat('vendor.js'))
@@ -38,7 +39,12 @@ gulp.task('pack-vendor-js', function () {
 });
 
 gulp.task('pack-css', function () {
-	return gulp.src(['wwwroot/lib/css/bootstrap.base.min.css', 'wwwroot/lib/css/bootstrap-grid.min.css', 'wwwroot/css/*.css'])
+	return gulp.src([
+			'wwwroot/lib/css/bootstrap.base.min.css',
+			'wwwroot/lib/css/bootstrap-grid.min.css',
+			'wwwroot/lib/css/noty.min.css',
+			'wwwroot/css/*.css'
+		])
 		.pipe(concat('stylesheet.css'))
 		.pipe(cleanCss())
 		.pipe(gulp.dest('wwwroot/build/css'));

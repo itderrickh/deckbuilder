@@ -13,7 +13,7 @@
                 <img style="height: 100%; width: 100%;" ng-right-click="createCtrl.largeUrl = d._source.localImageUrl" ng-click="createCtrl.newRemove(d)" ng-src="http://localhost:5000/image-store{{d._source.localImageUrl}}" />
             </div>
             <div style="margin-top: 20px;">
-                <button class="btn btn-primary" ng-disabled="createCtrl.deckData.length !== 60" ng-click="createCtrl.newSubmit()">Submit</button>
+                <button class="btn btn-primary" ng-disabled="createCtrl.deckData.length !== 60 || pendingRequest" ng-click="createCtrl.newSubmit()">Submit</button>
             </div>
         </div>
         <form ng-submit="createCtrl.search()" class="row">
@@ -21,7 +21,7 @@
                 <input class="form-control" ng-model="createCtrl.searchField" />
             </div>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                <button class="btn btn-primary" type="submit">Search</button>
+                <button class="btn btn-primary" ng-disabled="pendingRequest" type="submit">Search</button>
             </div>
         </form>
 

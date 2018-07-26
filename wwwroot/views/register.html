@@ -42,7 +42,7 @@
 				<small id="helpId" class="form-text text-muted" ng-show="regCtrl.message.length > 0">{{regCtrl.message}}</small>
 
 				<div>
-					<button class="btn btn-primary" type="submit">Register</button>
+					<button class="btn btn-primary" ng-disabled="pendingRequest" type="submit">Register</button>
 				</div>
 			</form>
 

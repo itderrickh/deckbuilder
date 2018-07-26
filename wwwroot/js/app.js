@@ -19,6 +19,13 @@ app.factory('authHttpResponseInterceptor', ['$q', '$location', '$rootScope', fun
             if (rejection.status === 401) {
                 var oldpath = $location.path();
 
+                new Noty({
+                    theme: 'bootstrap-v4',
+                    text: 'Authorization has expired. Please log-in to continue.',
+                    type: 'error',
+                    timeout: 3000
+                }).show();
+
                 if(rejection.data && rejection.data.description === "Signature has expired") {
                     $rootScope.token = null;
                     $rootScope.user = null;
@@ -27,6 +34,12 @@ app.factory('authHttpResponseInterceptor', ['$q', '$location', '$rootScope', fun
                 }
 
                 $location.path('/login');
+            } else {
+                new Noty({
+                    theme: 'bootstrap-v4',
+                    text: rejection.data.error,
+                    type: 'error'
+                }).show();
             }
             return $q.reject(rejection);
         }
@@ -36,6 +49,28 @@ app.factory('authHttpResponseInterceptor', ['$q', '$location', '$rootScope', fun
 app.config(['$httpProvider', function ($httpProvider) {
     //Http Intercpetor to check auth failures for xhr requests
     $httpProvider.interceptors.push('authHttpResponseInterceptor');
+    $httpProvider.interceptors.push(['$rootScope', function ($rootScope) {
+        var activeRequests = 0;
+
+        return {
+            request: function (config) {
+                $rootScope.pendingRequest = true;
+
+                activeRequests++;
+
+                return config;
+            },
+            response: function (response) {
+                activeRequests--;
+
+                if(activeRequests === 0) {
+                    $rootScope.pendingRequest = false;
+                }
+
+                return response;
+            }
+        }
+    }]);
 }]);
 
 app.directive('ngRightClick', ['$parse', function($parse) {
