@@ -83,13 +83,13 @@ def add_deck():
 	ses.commit()
 
 	for _, value in deck_list.items():
+		if "{*}" in value['card']:
+			value['card'].replace("{*}", "Prism Star")
 		if value['type'] == "Energy":
 			if "Energy" not in value['card']:
 				value['card'] += " Energy"
-			print(value['card'])
 			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
 		else:
-			print(value['card'])
 			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8'), Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
@@ -108,6 +108,8 @@ def import_limitless_deck():
 	ses.commit()
 
 	for _, value in deck_list.items():
+		if "{*}" in value['card']:
+			value['card'].replace("{*}", "Prism Star")
 		if value['type'] == "Energy":
 			if "Energy" not in value['card']:
 				value['card'] += " Energy"
