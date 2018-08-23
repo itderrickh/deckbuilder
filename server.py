@@ -57,6 +57,29 @@ def error_handler(error):
 	print(error)
 	return jsonify({ 'message': 'Error', 'error': str(error) }), 500
 
+@jwt_required
+@app.route('/api/user', methods=['GET'])
+def get_user():
+	return jsonify({ 'user': current_identity.serialize() })
+
+@jwt_required
+@app.route('/api/user', methods=['PUT'])
+def update_user():
+	content = request.get_json()
+
+	if current_identity is not None:
+		user = ses.query(User).filter(User.id==current_identity.id).first()
+		user.name=content['name']
+		user.username=content['username']
+		user.playerid=content['playerid']
+		user.dateofbirth=datetime.strptime(content['dateofbirth'], "%Y-%m-%dT%H:%M:%S.%fZ" )
+		user.theme=content['theme']
+		user.zipCode=content['zipCode']
+		ses.commit()
+
+
+	return jsonify({ 'success': True })
+
 @app.route('/api/register', methods=['POST'])
 def register():
 	content = request.get_json()
@@ -70,7 +93,8 @@ def register():
 			password=pbkdf2_sha256.hash(content['password']),
 			playerid=content['playerid'],
 			dateofbirth=datetime.strptime(content['dateofbirth'], "%Y-%m-%dT%H:%M:%S.%fZ" ),
-			theme=content['theme']
+			theme=content['theme'],
+			zipCode=content['zipCode']
 		)
 
 		ses.add(user)

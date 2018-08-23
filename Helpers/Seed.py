@@ -43,6 +43,7 @@ def seed():
         s19 = CardSet(name="Sun & Moon - Crimson Invasion", setName="CIN", standard=True)
         s20 = CardSet(name="Sun & Moon - Ultra Prism", setName="UPR", standard=True)
         s40 = CardSet(name="Sun & Moon - Forbidden Light", setName="FLI", standard=True)
+        s42 = CardSet(name="Sun & Moon - Celestial Storm", setName="CES", standard=True)
 
         s21 = CardSet(name="Sun & Moon - Shining Legends", setName="SLG", standard=True)
         s22 = CardSet(name="Sun & Moon Trainer Kit", setName="TK", standard=True)
@@ -104,6 +105,7 @@ def seed():
         ses.add(s39)
         ses.add(s40)
         ses.add(s41)
+        ses.add(s42)
         ses.commit()
 
     sets = ses.query(CardSet).all()
@@ -139,7 +141,15 @@ def seed():
         ses.commit()
 
     if len(ses.query(User).all()) <= 0:
-        u1 = User(name="Derrick Heinemann", username="itderrickh", password=pbkdf2_sha256.hash('itderrickh'),playerid='2548696',dateofbirth=datetime.date(1993, 9, 14), theme="darkly")
+        u1 = User(
+            name="Derrick Heinemann",
+            username="itderrickh",
+            password=pbkdf2_sha256.hash('itderrickh'),
+            playerid='2548696',
+            dateofbirth=datetime.date(1993, 9, 14),
+            zipCode='54904',
+            theme="darkly"
+        )
         ses.add(u1)
 
         ses.commit()

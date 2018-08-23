@@ -2,6 +2,7 @@ from flask import Flask, request, send_from_directory, Response, Blueprint
 from AppState.Session import ses
 from Models.Event import Event
 from flask.json import jsonify
+from flask_jwt import JWT, current_identity, jwt_required
 import requests
 import json
 from datetime import datetime, timedelta
@@ -38,8 +39,12 @@ def get_list_from_official(url):
 @util_routes.route("/api/events", methods=['GET'])
 @util_routes.route("/api/events/<refresh>", methods=['GET'])
 def get_home(refresh="false"):
+	zipCode = '54904'
+	if current_identity is not None:
+		zipCode = current_identity.zipCode
+	url = "https://www.pokemon.com/us/play-pokemon/pokemon-events/find-an-event/?country=176&postal_code={}&city=&event_name=&location_name=&address=&state_object=&state_other=&distance_within=100&start_date=0&end_date=30&event_type=league&event_type=tournament&event_type=premier&product_type=tcg&product_type=vg&sort_order=when&results_pp=100".format(zipCode)
 	if refresh == "true":
-		res = get_list_from_official("https://www.pokemon.com/us/play-pokemon/pokemon-events/find-an-event/?country=176&postal_code=54904&city=&event_name=&location_name=&address=&state_object=&state_other=&distance_within=50&start_date=0&end_date=30&event_type=league&event_type=tournament&event_type=premier&product_type=tcg&product_type=vg&sort_order=when&results_pp=50")
+		res = get_list_from_official(url)
 	else:
 		res = get_events()
 	return jsonify(Event.serialize_list(res))

@@ -5,6 +5,7 @@ app.controller('RegisterController', ['$timeout', '$location', '$rootScope', 'Re
 	regCtrl.password = "";
 	regCtrl.playerId = "";
 	regCtrl.passwordConfirm = "";
+	regCtrl.zipCode = "";
 	regCtrl.name = "";
 	regCtrl.theme = "base";
 	regCtrl.dob = new Date();
@@ -21,7 +22,8 @@ app.controller('RegisterController', ['$timeout', '$location', '$rootScope', 'Re
 			playerid: regCtrl.playerId,
 			name: regCtrl.name,
 			dateofbirth: regCtrl.dob,
-			theme: regCtrl.theme
+			theme: regCtrl.theme,
+			zipCode: regCtrl.zipCode
 		}).then(function(response) {
 			swal({
 				title: 'Completed!',

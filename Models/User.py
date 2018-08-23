@@ -13,6 +13,7 @@ class User(Base, Serializer):
     playerid = Column(String)
     dateofbirth = Column(Date)
     theme = Column(String)
+    zipCode = Column(String)
 
     def serialize(self):
         d = Serializer.serialize(self)

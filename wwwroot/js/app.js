@@ -39,7 +39,9 @@ app.factory('authHttpResponseInterceptor', ['$q', '$location', '$rootScope', fun
                 new Noty({
                     theme: 'bootstrap-v4',
                     text: rejection.data.error,
-                    type: 'error'
+                    type: 'error',
+                    layout: 'bottomCenter',
+                    timeout: 3000
                 }).show();
             }
             return $q.reject(rejection);
