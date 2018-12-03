@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 class Event(Base, Serializer):
 	__tablename__ = "Events"
 	id = Column(Integer, primary_key=True)
-	name = Column(String)
+	title = Column(String)
 	location = Column(String)
 	status = Column(String)
 	date = Column(DateTime)

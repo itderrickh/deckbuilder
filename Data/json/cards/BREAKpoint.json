@@ -855,7 +855,7 @@
   },
   {
     "id": "xy9-18",
-    "name": "Golduck Break",
+    "name": "Golduck BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy9/18.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -1990,7 +1990,7 @@
   },
   {
     "id": "xy9-41",
-    "name": "Greninja Break",
+    "name": "Greninja BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy9/41.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -2296,7 +2296,7 @@
   },
   {
     "id": "xy9-47",
-    "name": "Luxray Break",
+    "name": "Luxray BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy9/47.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -3254,7 +3254,7 @@
   },
   {
     "id": "xy9-66",
-    "name": "Trevenant Break",
+    "name": "Trevenant BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy9/66.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -4467,7 +4467,7 @@
   },
   {
     "id": "xy9-89",
-    "name": "Raticate Break",
+    "name": "Raticate BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy9/89.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",

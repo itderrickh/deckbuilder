@@ -364,7 +364,7 @@
   },
   {
     "id": "xy11-8",
-    "name": "Yanmega Break",
+    "name": "Yanmega BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy11/8.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -1011,7 +1011,7 @@
   },
   {
     "id": "xy11-21",
-    "name": "Talonflame Break",
+    "name": "Talonflame BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy11/21.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -1145,7 +1145,7 @@
   },
   {
     "id": "xy11-24",
-    "name": "Pyroar Break",
+    "name": "Pyroar BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy11/24.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -1677,7 +1677,7 @@
   },
   {
     "id": "xy11-35",
-    "name": "Clawitzer Break",
+    "name": "Clawitzer BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy11/35.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -3304,7 +3304,7 @@
   },
   {
     "id": "xy11-66",
-    "name": "Yveltal Break",
+    "name": "Yveltal BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy11/66.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -4216,7 +4216,7 @@
   },
   {
     "id": "xy11-82",
-    "name": "Xerneas Break",
+    "name": "Xerneas BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy11/82.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -4471,7 +4471,7 @@
   },
   {
     "id": "xy11-87",
-    "name": "Hydreigon Break",
+    "name": "Hydreigon BREAK",
     "imageUrl": "https://images.pokemontcg.io/xy11/87.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",

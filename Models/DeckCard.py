@@ -15,8 +15,12 @@ class DeckCard(Base, Serializer):
 
     def serialize(self):
         d = Serializer.serialize(self)
+        del d["deck"]
+        del d["card"]
         return d
 
     def serialize_full(self):
         d = Serializer.serialize(self)
+        d["card"] = d["card"].serialize()
+        d["deck"] = d["deck"].serialize()
         return d

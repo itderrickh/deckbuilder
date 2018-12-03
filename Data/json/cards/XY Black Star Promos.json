@@ -7094,7 +7094,7 @@
   },
   {
     "id": "xyp-XY134",
-    "name": "Empoleon Break",
+    "name": "Empoleon BREAK",
     "imageUrl": "https://images.pokemontcg.io/xyp/XY134.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -7130,7 +7130,7 @@
   },
   {
     "id": "xyp-XY135",
-    "name": "Beheeyem Break",
+    "name": "Beheeyem BREAK",
     "imageUrl": "https://images.pokemontcg.io/xyp/XY135.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -7167,7 +7167,7 @@
   },
   {
     "id": "xyp-XY136",
-    "name": "Noctowl Break",
+    "name": "Noctowl BREAK",
     "imageUrl": "https://images.pokemontcg.io/xyp/XY136.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -8179,7 +8179,7 @@
   },
   {
     "id": "xyp-XY154",
-    "name": "Ho-Oh Break",
+    "name": "Ho-Oh BREAK",
     "imageUrl": "https://images.pokemontcg.io/xyp/XY154.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -8218,7 +8218,7 @@
   },
   {
     "id": "xyp-XY155",
-    "name": "Wobbuffet Break",
+    "name": "Wobbuffet BREAK",
     "imageUrl": "https://images.pokemontcg.io/xyp/XY155.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",
@@ -8916,6 +8916,10 @@
     "text": [
       "When a Pokémon-EX has been Knocked Out, your opponent takes 2 Prize cards."
     ],
+    "types": [
+      "Fire",
+      "Water"
+    ],
     "attacks": [
       {
         "name": "Volcanic Heat",
@@ -9219,7 +9223,7 @@
   },
   {
     "id": "xyp-XY181",
-    "name": "Crobat Break",
+    "name": "Crobat BREAK",
     "imageUrl": "https://images.pokemontcg.io/xyp/XY181.png",
     "subtype": "BREAK",
     "supertype": "Pokémon",

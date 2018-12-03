@@ -28,12 +28,12 @@ def seed():
         s6 = CardSet(name="XY - Primal Clash", setName="PRC", standard=False)
         s7 = CardSet(name="XY - Roaring Skies", setName="ROS", standard=False)
         s8 = CardSet(name="XY - Ancient Origins", setName="AOR", standard=False)
-        s9 = CardSet(name="XY - BREAKthrough", setName="BKT", standard=True)
-        s10 = CardSet(name="XY - BREAKpoint", setName="BKP", standard=True)
-        s11 = CardSet(name="XY - Fates Collide", setName="FCO", standard=True)
-        s12 = CardSet(name="XY - Steam Seige", setName="STS", standard=True)
-        s13 = CardSet(name="XY - Double Crisis", setName="DCR", standard=True)
-        s41 = CardSet(name="XY - Evolutions", setName="EVO", standard=True)
+        s9 = CardSet(name="XY - BREAKthrough", setName="BKT", standard=False)
+        s10 = CardSet(name="XY - BREAKpoint", setName="BKP", standard=False)
+        s11 = CardSet(name="XY - Fates Collide", setName="FCO", standard=False)
+        s12 = CardSet(name="XY - Steam Seige", setName="STS", standard=False)
+        s13 = CardSet(name="XY - Double Crisis", setName="DCR", standard=False)
+        s41 = CardSet(name="XY - Evolutions", setName="EVO", standard=False)
 
         s14 = CardSet(name="XY - Generations", setName="GEN", standard=True)
         s15 = CardSet(name="XY - XY Trainer Kit", setName="TK", standard=True)
@@ -44,6 +44,8 @@ def seed():
         s20 = CardSet(name="Sun & Moon - Ultra Prism", setName="UPR", standard=True)
         s40 = CardSet(name="Sun & Moon - Forbidden Light", setName="FLI", standard=True)
         s42 = CardSet(name="Sun & Moon - Celestial Storm", setName="CES", standard=True)
+        s43 = CardSet(name="Sun & Moon - Dragon Majesty", setName="DRM", standard=True)
+        s44 = CardSet(name="Sun & Moon - Lost Thunder", setName="LOT", standard=True)
 
         s21 = CardSet(name="Sun & Moon - Shining Legends", setName="SLG", standard=True)
         s22 = CardSet(name="Sun & Moon Trainer Kit", setName="TK", standard=True)
@@ -106,22 +108,24 @@ def seed():
         ses.add(s40)
         ses.add(s41)
         ses.add(s42)
+        ses.add(s43)
+        ses.add(s44)
         ses.commit()
 
     sets = ses.query(CardSet).all()
 
     if(len(ses.query(Card).all()) <= 0):
-        ElasticStore.indices.delete(index='card-index')
+        #ElasticStore.indices.delete(index='card-index')
         for item in glob.glob('./Data/json/cards/*'):
             print(item)
             with open(item, encoding="utf8") as f:
                 data = json.load(f)
                 for d in data:
                     card = Card(
-                        name=d['name'].encode('UTF-8'),
+                        name=d['name'].replace("◇", "Prism Star").replace("{*}", "Prism Star"),
                         subtype=d.get('subtype'),
                         type=d.get('supertype'),
-                        evolvesFrom=d.get('evolvesFrom', '').encode('UTF-8'),
+                        evolvesFrom=d.get('evolvesFrom', ''),
                         ability=d.get('ability'),
                         hp=int(d.get('hp') if str(d.get('hp')) != "None" else 0),
                         retreatCost=d.get('convertedRetreatCost'),

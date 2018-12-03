@@ -24,8 +24,12 @@ gulp.task('pack-vendor-js', function () {
 			'wwwroot/lib/js/angular.min.js',
 			'wwwroot/lib/js/angular-route.js',
 			'wwwroot/lib/js/angucomplete-alt.min.js',
+			'wwwroot/lib/js/angular-cookie.min.js',
 			//'wwwroot/lib/js/spin.js',
 			//'wwwroot/lib/js/angular-spinner.min.js',
+			'wwwroot/lib/js/moment.js',
+			'wwwroot/lib/js/fullcalendar.min.js',
+			'wwwroot/lib/js/calendar.js',
 			'wwwroot/lib/js/bootstrap.min.js',
 			'wwwroot/lib/js/clipboard.min.js',
 			'wwwroot/lib/js/fontawesome-all.min.js',
@@ -42,6 +46,7 @@ gulp.task('pack-css', function () {
 	return gulp.src([
 			'wwwroot/lib/css/bootstrap.base.min.css',
 			'wwwroot/lib/css/bootstrap-grid.min.css',
+			'wwwroot/lib/css/fullcalendar.min.css',
 			'wwwroot/lib/css/noty.min.css',
 			'wwwroot/css/*.css'
 		])

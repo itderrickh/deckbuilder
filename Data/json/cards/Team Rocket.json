@@ -2439,12 +2439,7 @@
     "supertype": "Pokémon",
     "level": "26",
     "hp": "40",
-    "retreatCost": [
-      "Colorless",
-      "Colorless",
-      "Colorless"
-    ],
-    "convertedRetreatCost": 3,
+    "convertedRetreatCost": 0,
     "number": "48",
     "artist": "Keiji Kinebuchi",
     "rarity": "Uncommon",

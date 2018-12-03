@@ -1,4 +1,4 @@
-var app = angular.module("DeckBuilderModule", ['ngRoute', 'ngclipboard']);
+var app = angular.module("DeckBuilderModule", ['ngRoute', 'ngclipboard', 'ui.calendar', 'ngCookies']);
 
 app.service('tokenToUser', [function() {
     this.get = function (token) {
@@ -92,17 +92,17 @@ app.run(['$rootScope', '$location', '$http', 'tokenToUser', function ($rootScope
     $rootScope.css = "base";
     $rootScope.BASE_URL = "http://localhost:5000/api/";
     $rootScope.token = localStorage.getItem('token');
-    if ($rootScope.token != null) {
+    if ($rootScope.token !== null) {
         $rootScope.user = tokenToUser.get($rootScope.token);
         $rootScope.css = $rootScope.user.theme;
     }
 
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
-        if (typeof (next.resolve) != 'undefined') {
+        if (typeof (next.resolve) !== 'undefined') {
             if (next.resolve.logout) {
                 next.resolve.logout($rootScope);
                 $location.path('/login');
-            } else if ($rootScope.token == null || !next.resolve($rootScope.token)) {
+            } else if ($rootScope.token === null || !next.resolve($rootScope.token)) {
                 $location.path('/login');
             }
         }
@@ -111,7 +111,7 @@ app.run(['$rootScope', '$location', '$http', 'tokenToUser', function ($rootScope
 
 app.config(['$routeProvider', function ($routeProvider) {
     var resolve = function (token) {
-        return typeof (token) != 'undefined' && token != '';
+        return typeof (token) !== 'undefined' && token !== '';
     };
 
     $routeProvider
@@ -139,6 +139,11 @@ app.config(['$routeProvider', function ($routeProvider) {
             templateUrl: "./views/import.html",
             controller: "ImportController",
             controllerAs: "importCtrl",
+            resolve: resolve
+        }).when("/hand", {
+            templateUrl: "./views/hand.html",
+            controller: "HandController",
+            controllerAs: "handCtrl",
             resolve: resolve
         }).when("/export", {
             templateUrl: "./views/export.html",

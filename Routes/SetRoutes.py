@@ -48,10 +48,10 @@ def add_sets_json():
 				data = json.load(f)
 				for d in data:
 					card = Card(
-						name=d['name'].encode('UTF-8'),
+						name=d['name'],
 						subtype=d.get('subtype'),
 						type=d.get('supertype'),
-						evolvesFrom=d.get('evolvesFrom', '').encode('UTF-8'),
+						evolvesFrom=d.get('evolvesFrom', ''),
 						ability=d.get('ability'),
 						hp=int(d.get('hp') if str(d.get('hp')) != "None" else 0),
 						retreatCost=d.get('convertedRetreatCost'),

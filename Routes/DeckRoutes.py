@@ -14,6 +14,7 @@ import os
 import time
 import copy
 from threading import Thread
+import random
 
 pdf_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../pdfgen')
 deck_routes = Blueprint('deck_routes', __name__,
@@ -72,6 +73,20 @@ def get_decks():
 	res = ses.query(Deck).filter(Deck.userId==current_identity.id).all()
 	return jsonify(Deck.serialize_list(res))
 
+@deck_routes.route("/api/decks/hand/<deckid>", methods=['GET'])
+@jwt_required()
+def get_sample_hand(deckid):
+	#res = ses.query(Deck).filter(Deck.userId==current_identity.id, Deck.id==deckid).all()
+	cards = ses.query(DeckCard).filter(DeckCard.deckId==deckid).all()
+	cardIds = [r.cardId for r in cards]
+
+	finalCards = copy.deepcopy(ses.query(Card).filter(Card.Id.in_(cardIds)).all())
+
+	#NOTE GET ALL THE CARDS INDIVIDUALLY HERE
+	random.shuffle(finalCards)
+	lastList = finalCards[:7]
+	return jsonify(Card.serialize_list(lastList))
+
 @deck_routes.route("/api/decks/import", methods=['POST'])
 @jwt_required()
 def add_deck():
@@ -84,13 +99,15 @@ def add_deck():
 
 	for _, value in deck_list.items():
 		if "{*}" in value['card']:
-			value['card'].replace("{*}", "Prism Star")
+			value['card'] = value['card'].replace("{*}", "Prism Star")
+		if "◇" in value['card']:
+			value['card'] = value['card'].replace("◇", "Prism Star")
 		if value['type'] == "Energy":
 			if "Energy" not in value['card']:
 				value['card'] += " Energy"
-			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
+			card = ses.query(Card).filter(Card.name==value['card']).first()
 		else:
-			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8'), Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
+			card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	ses.commit()
@@ -110,13 +127,15 @@ def import_limitless_deck():
 	for _, value in deck_list.items():
 		if "{*}" in value['card']:
 			value['card'].replace("{*}", "Prism Star")
+		if "◇" in value['card']:
+			value['card'].replace("◇", "Prism Star")
 		if value['type'] == "Energy":
 			if "Energy" not in value['card']:
 				value['card'] += " Energy"
 			print(value['card'])
-			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
+			card = ses.query(Card).filter(Card.name==value['card']).first()
 		else:
-			card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8'), Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
+			card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
 			print(value['card'])
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 

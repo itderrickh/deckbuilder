@@ -29,8 +29,8 @@ class Card(Base, Serializer):
 
     def serialize(self):
         d = Serializer.serialize(self)
-        d['name'] = str(d['name'].decode("utf-8"))
-        d['evolvesFrom'] = str(d['evolvesFrom'].decode("utf-8"))
+        d['name'] = str(d['name'])
+        d['evolvesFrom'] = str(d['evolvesFrom'])
         d['count'] = self.count
         return d
 
