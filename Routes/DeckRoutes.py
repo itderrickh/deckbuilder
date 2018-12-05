@@ -51,7 +51,6 @@ def getSetCode(sets, setName):
 def create_deck_bulk():
 	content = request.get_json()
 	deck = Deck(name=content['name'], userId=current_identity.id)
-	sets = ses.query(CardSet).all()
 	ses.add(deck)
 	ses.commit()
 
@@ -79,12 +78,16 @@ def get_sample_hand(deckid):
 	#res = ses.query(Deck).filter(Deck.userId==current_identity.id, Deck.id==deckid).all()
 	cards = ses.query(DeckCard).filter(DeckCard.deckId==deckid).all()
 	cardIds = [r.cardId for r in cards]
+	fullDeck = list()
 
 	finalCards = copy.deepcopy(ses.query(Card).filter(Card.Id.in_(cardIds)).all())
+	for card in finalCards:
+		countOfCard = next(r.count for r in cards if card.Id==r.cardId)
+		for _ in range(countOfCard):
+			fullDeck.append(card)
 
-	#NOTE GET ALL THE CARDS INDIVIDUALLY HERE
-	random.shuffle(finalCards)
-	lastList = finalCards[:7]
+	random.shuffle(fullDeck)
+	lastList = fullDeck[:7]
 	return jsonify(Card.serialize_list(lastList))
 
 @deck_routes.route("/api/decks/import", methods=['POST'])

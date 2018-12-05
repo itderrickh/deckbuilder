@@ -9,7 +9,6 @@ static_routes = Blueprint('static_routes', __name__,
 @static_routes.route('/', methods=['GET'])
 def serve_dir_directory_index():
 	''' Serves the static index file '''
-	print(static_file_dir)
 	return send_from_directory(static_file_dir, 'index.html')
 
 @static_routes.route('/<path:path>', methods=['GET'])
