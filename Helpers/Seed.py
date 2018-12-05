@@ -49,9 +49,9 @@ def seed():
 
         s21 = CardSet(name="Sun & Moon - Shining Legends", setName="SLG", standard=True)
         s22 = CardSet(name="Sun & Moon Trainer Kit", setName="TK", standard=True)
-        s23 = CardSet(name="BW - BW Black Star Promos", setName="PR-BW", standard=False)
+        s23 = CardSet(name="Black & White - BW Black Star Promos", setName="PR-BW", standard=False)
         s24 = CardSet(name="XY - XY Black Star Promos", setName="PR-XY", standard=True)
-        s26 = CardSet(name="SM - SM Black Star Promos", setName="PR-SM", standard=True)
+        s26 = CardSet(name="Sun & Moon - SM Black Star Promos", setName="PR-SM", standard=True)
         s27 = CardSet(name="McDonald's Collection", setName="MCD", standard=True)
 
         s28 = CardSet(name="Black & White - Legendary Treasures", setName="LTR", standard=False)
@@ -115,7 +115,7 @@ def seed():
     sets = ses.query(CardSet).all()
 
     if(len(ses.query(Card).all()) <= 0):
-        #ElasticStore.indices.delete(index='card-index')
+        ElasticStore.indices.delete(index='card-index')
         for item in glob.glob('./Data/json/cards/*'):
             print(item)
             with open(item, encoding="utf8") as f:

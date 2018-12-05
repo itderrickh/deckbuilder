@@ -7,7 +7,6 @@ import requests
 import json
 from datetime import datetime, timedelta
 from lxml import html
-import geocoder
 
 util_routes = Blueprint('util_routes', __name__,
 						template_folder='templates')
