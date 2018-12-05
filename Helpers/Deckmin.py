@@ -13,15 +13,15 @@ def get_shared_decklist(deck_one, deck_two):
 	deck_two_dict = dict()
 	sets = ses.query(CardSet).all()
 
-	deck_one_cards = [x.name.decode('UTF-8') + getSet(sets, x.setName) for x in deck_one]
-	deck_two_cards = [x.name.decode('UTF-8') + getSet(sets, x.setName) for x in deck_two]
+	deck_one_cards = [x.name + getSet(sets, x.setName) for x in deck_one]
+	deck_two_cards = [x.name + getSet(sets, x.setName) for x in deck_two]
 	# Store all the cards in the decks
 	all_props = list(set(deck_one_cards) | set(deck_two_cards))
 
 	# Go through all the properties
 	for prop in all_props:
-		cards_in_deck_one = [x for x in deck_one if x.name.decode('UTF-8') + getSet(sets, x.setName) == prop]
-		cards_in_deck_two = [y for y in deck_two if y.name.decode('UTF-8') + getSet(sets, y.setName) == prop]
+		cards_in_deck_one = [x for x in deck_one if x.name + getSet(sets, x.setName) == prop]
+		cards_in_deck_two = [y for y in deck_two if y.name + getSet(sets, y.setName) == prop]
 		# Adjust the two decks and the shared decks accordingly
 		if len(cards_in_deck_one) > 0 and len(cards_in_deck_two) > 0:
 			min_val = min(cards_in_deck_one[0].count, cards_in_deck_two[0].count)

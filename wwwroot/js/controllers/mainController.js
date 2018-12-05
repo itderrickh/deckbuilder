@@ -20,12 +20,27 @@ app.controller('MainController', ['HomeService', function (homeService) {
     mainCtrl.eventClick = function (date, jsEvent, view) {
         date.date = date.date.replace("GMT", "");
         var formatDate = moment(date.date).format("dddd, MMMM Do YYYY @ hh:mm a");
+        var splitLoc = date.location.split(", ");
+        var location = splitLoc[0] + ", " + splitLoc[1];
+
+        var output = formatDate + '<br>' + location;
         swal(
             date.title,
-            formatDate,
+            output,
             'info'
         );
     };
+
+    mainCtrl.dayClick = function(date) {
+        var inverseOffset = moment(new Date()).utcOffset() * -1;
+        var inputDate = moment(date).utcOffset(inverseOffset);
+        var eventsOnDate = mainCtrl.events.filter(function(value, index) {
+            return moment(value.date).isSame(inputDate, 'day');
+        });
+        console.log(inputDate);
+        console.log(eventsOnDate);
+    };
+
     mainCtrl.eventSources = [mainCtrl.events, mainCtrl.eventSource];
 
     mainCtrl.uiConfig = {
@@ -37,7 +52,8 @@ app.controller('MainController', ['HomeService', function (homeService) {
                 center: '',
                 right: 'today prev,next'
             },
-            eventClick: mainCtrl.eventClick
+            eventClick: mainCtrl.eventClick,
+            dayClick: mainCtrl.dayClick
         }
     };
 }]);

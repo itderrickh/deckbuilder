@@ -8,6 +8,7 @@ from Models.CardSet import CardSet
 from Models.Event import Event
 from AppState.Session import Engine
 from passlib.hash import pbkdf2_sha256
+from unidecode import unidecode
 import datetime
 import json
 import glob
@@ -122,7 +123,7 @@ def seed():
                 data = json.load(f)
                 for d in data:
                     card = Card(
-                        name=d['name'].replace("◇", "Prism Star").replace("{*}", "Prism Star"),
+                        name=unidecode(d['name'].replace("◇", "Prism Star").replace("{*}", "Prism Star")),
                         subtype=d.get('subtype'),
                         type=d.get('supertype'),
                         evolvesFrom=d.get('evolvesFrom', ''),

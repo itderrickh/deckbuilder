@@ -34,6 +34,12 @@ app.controller('ExportController', ['ExportService', '$timeout', '$window', func
 
     exportCtrl.exportOfficial = function() {
         exportService.exportOfficial(exportCtrl.selectedDeck.id).then(function(response) {
+            if(response.data.warnings.length > 0) {
+                var output = '<ul>' + response.data.warnings.reduce(function(acc, item) {
+                    return acc + "<li>" + item + "</li>"
+                }, '') + '</ul>';
+                swal("Warning!", output , "warning");
+            }
             $window.open("http://localhost:5000/api/pdf/" + response.data.pdffile, '', 'height=650,width=840');
         });
     };

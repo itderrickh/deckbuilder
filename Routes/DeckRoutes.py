@@ -15,6 +15,8 @@ import time
 import copy
 from threading import Thread
 import random
+import urllib
+from Helpers.UrlOpener import MyOpener, DOWNLOADS_DIR, download_cards_if_not_exists
 
 pdf_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../pdfgen')
 deck_routes = Blueprint('deck_routes', __name__,
@@ -25,26 +27,6 @@ def getSet(sets, setCode):
 
 def getSetCode(sets, setName):
 	return next((s.setName for s in sets if s.name == setName), "")
-
-#@deck_routes.route("/api/deck/bulk", methods=['POST'])
-#@jwt_required()
-#def create_deck_bulk():
-	#content = request.get_json()
-	#deck = Deck(name=content['name'], userId=current_identity.id)
-	#sets = ses.query(CardSet).all()
-	#ses.add(deck)
-	#ses.commit()
-
-	#for value in content['deck']:
-	#	if value['type'] == "Energy":
-	#		if "Energy" not in value['card']:
-	#			value['card'] += " Energy"
-	#		card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8')).first()
-	#	else:
-	#		card = ses.query(Card).filter(Card.name==value['card'].encode('UTF-8'), Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
-	#	ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
-
-	#return jsonify({ }), 204
 
 @deck_routes.route("/api/deck/bulk", methods=['POST'])
 @jwt_required()
@@ -75,16 +57,17 @@ def get_decks():
 @deck_routes.route("/api/decks/hand/<deckid>", methods=['GET'])
 @jwt_required()
 def get_sample_hand(deckid):
-	#res = ses.query(Deck).filter(Deck.userId==current_identity.id, Deck.id==deckid).all()
 	cards = ses.query(DeckCard).filter(DeckCard.deckId==deckid).all()
 	cardIds = [r.cardId for r in cards]
 	fullDeck = list()
-
+	
 	finalCards = copy.deepcopy(ses.query(Card).filter(Card.Id.in_(cardIds)).all())
 	for card in finalCards:
 		countOfCard = next(r.count for r in cards if card.Id==r.cardId)
 		for _ in range(countOfCard):
 			fullDeck.append(card)
+
+	download_cards_if_not_exists(finalCards)
 
 	random.shuffle(fullDeck)
 	lastList = fullDeck[:7]
@@ -108,7 +91,7 @@ def add_deck():
 		if value['type'] == "Energy":
 			if "Energy" not in value['card']:
 				value['card'] += " Energy"
-			card = ses.query(Card).filter(Card.name==value['card']).first()
+			card = ses.query(Card).filter(Card.name==value['card']).order_by(Card.Id.desc()).first()
 		else:
 			card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
@@ -135,11 +118,10 @@ def import_limitless_deck():
 		if value['type'] == "Energy":
 			if "Energy" not in value['card']:
 				value['card'] += " Energy"
-			print(value['card'])
-			card = ses.query(Card).filter(Card.name==value['card']).first()
+			card = ses.query(Card).filter(Card.name==value['card']).order_by(Card.Id.desc()).first()
 		else:
 			card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
-			print(value['card'])
+		print(value['card'])
 		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 	ses.commit()
@@ -159,8 +141,8 @@ def export_pdf(deckid):
 		if card.type != "Energy":
 			card.setName = getSetCode(sets, card.setName)
 	uid = str(uuid.uuid4())
-	outfile = write_to_pdf(d1, current_identity, uid + '.pdf')
-	return jsonify({ 'pdffile': uid }), 201
+	outfile, warnings = write_to_pdf(d1, current_identity, uid + '.pdf')
+	return jsonify({ 'pdffile': uid, 'warnings': warnings }), 201
 
 @deck_routes.route("/api/pdf/<pdfid>", methods=['GET'])
 def one_time_pdf(pdfid):

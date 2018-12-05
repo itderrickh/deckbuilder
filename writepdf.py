@@ -9,6 +9,7 @@ from AppState.Session import ses
 
 pdf_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pdfgen')
 def write_to_pdf(cards, user, outputPDF):
+    warnings = list()
     bd = user.dateofbirth
     pokemon = [x for x in cards if x.type == 'Pok\u00e9mon']
     trainers = [x for x in cards if x.type == 'Trainer']
@@ -48,7 +49,11 @@ def write_to_pdf(cards, user, outputPDF):
         can.drawString(375, 667, "x")
 
     # Pokemon
-    for i in list(range(0, len(pokemon))):
+    if(len(pokemon) > 10):
+        warnings.append("Not all the pokemon could fit. Please review and add cards accordingly.")
+
+    maxPokemon = min(len(pokemon), 10)
+    for i in list(range(0, maxPokemon)):
         # Count
         can.drawString(286, 586 - (i * 13.2), str(pokemon[i].count))
         # Name
@@ -59,12 +64,20 @@ def write_to_pdf(cards, user, outputPDF):
         can.drawString(534, 586 - (i * 13.2), pokemon[i].number)
 
     # Trainers
-    for i in list(range(0, len(trainers))):
+    if(len(trainers) > 18):
+        warnings.append("Not all the trainers could fit. Please review and add cards accordingly.")
+
+    maxtrainers = min(len(trainers), 18)
+    for i in list(range(0, maxtrainers)):
         can.drawString(286, 410 - (i * 13.2), str(trainers[i].count))
         can.drawString(320, 410 - (i * 13.2), trainers[i].name)
 
     # Energy
-    for i in list(range(0, len(energy))):
+    if(len(energy) > 18):
+        warnings.append("Not all the energy could fit. Please review and add cards accordingly.")
+
+    maxenergy = min(len(energy), 4)
+    for i in list(range(0, maxenergy)):
         can.drawString(286, 128 - (i * 13.2), str(energy[i].count))
         can.drawString(320, 128 - (i * 13.2), energy[i].name)
 
@@ -84,4 +97,4 @@ def write_to_pdf(cards, user, outputPDF):
     outputStream = open(os.path.join(pdf_file_dir, outputPDF), "wb")
     output.write(outputStream)
     outputStream.close()
-    return outputPDF
+    return outputPDF, warnings
