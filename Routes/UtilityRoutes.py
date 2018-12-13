@@ -1,6 +1,7 @@
 from flask import Flask, request, send_from_directory, Response, Blueprint
 from AppState.Session import ses
 from Models.Event import Event
+from Models.UserEvent import UserEvent
 from flask.json import jsonify
 from flask_jwt import JWT, current_identity, jwt_required
 import requests
@@ -52,3 +53,9 @@ def get_home(refresh="false"):
 	else:
 		res = get_events(request.args.get('start'), request.args.get('end'))
 	return jsonify(Event.serialize_list(res))
+
+@util_routes.route("/api/events/<userId>", methods=['GET'])
+@util_routes.route("/api/events/<userId>/<refresh>", methods=['GET'])
+def get_user_events(refresh="false"):
+	user_events = ses.query(UserEvent).filter(UserEvent.userId==current_identity.id, UserEvent.hidden==False).all()
+	return jsonify(UserEvent.serialize_list(user_events))

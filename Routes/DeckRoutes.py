@@ -60,7 +60,7 @@ def get_sample_hand(deckid):
 	cards = ses.query(DeckCard).filter(DeckCard.deckId==deckid).all()
 	cardIds = [r.cardId for r in cards]
 	fullDeck = list()
-	
+
 	finalCards = copy.deepcopy(ses.query(Card).filter(Card.Id.in_(cardIds)).all())
 	for card in finalCards:
 		countOfCard = next(r.count for r in cards if card.Id==r.cardId)
@@ -80,23 +80,29 @@ def add_deck():
 	deck_list = get_deck_from_source(content['text'])
 	sets = ses.query(CardSet).all()
 	deck = Deck(name=content['name'], userId=current_identity.id)
-	ses.add(deck)
-	ses.commit()
 
-	for _, value in deck_list.items():
-		if "{*}" in value['card']:
-			value['card'] = value['card'].replace("{*}", "Prism Star")
-		if "◇" in value['card']:
-			value['card'] = value['card'].replace("◇", "Prism Star")
-		if value['type'] == "Energy":
-			if "Energy" not in value['card']:
-				value['card'] += " Energy"
-			card = ses.query(Card).filter(Card.name==value['card']).order_by(Card.Id.desc()).first()
-		else:
-			card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
-		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
+	try:
+		ses.add(deck)
+		ses.flush()
 
-	ses.commit()
+		for _, value in deck_list.items():
+			if "{*}" in value['card']:
+				value['card'] = value['card'].replace("{*}", "Prism Star")
+			if "◇" in value['card']:
+				value['card'] = value['card'].replace("◇", "Prism Star")
+			if value['type'] == "Energy":
+				if "Energy" not in value['card']:
+					value['card'] += " Energy"
+				card = ses.query(Card).filter(Card.name==value['card']).order_by(Card.Id.desc()).first()
+			else:
+				card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
+			ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
+
+		ses.commit()
+	except:
+		ses.rollback()
+		raise
+
 
 	return jsonify({ 'deck': deck.serialize() }), 201
 
@@ -107,24 +113,28 @@ def import_limitless_deck():
 	deck_list = get_deck_from_limitless_tcg(content['url'])
 	sets = ses.query(CardSet).all()
 	deck = Deck(name=content['name'], userId=current_identity.id)
-	ses.add(deck)
-	ses.commit()
 
-	for _, value in deck_list.items():
-		if "{*}" in value['card']:
-			value['card'].replace("{*}", "Prism Star")
-		if "◇" in value['card']:
-			value['card'].replace("◇", "Prism Star")
-		if value['type'] == "Energy":
-			if "Energy" not in value['card']:
-				value['card'] += " Energy"
-			card = ses.query(Card).filter(Card.name==value['card']).order_by(Card.Id.desc()).first()
-		else:
-			card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
-		print(value['card'])
-		ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
+	try:
+		ses.add(deck)
+		ses.flush()
 
-	ses.commit()
+		for _, value in deck_list.items():
+			if "{*}" in value['card']:
+				value['card'].replace("{*}", "Prism Star")
+			if "◇" in value['card']:
+				value['card'].replace("◇", "Prism Star")
+			if value['type'] == "Energy":
+				if "Energy" not in value['card']:
+					value['card'] += " Energy"
+				card = ses.query(Card).filter(Card.name==value['card']).order_by(Card.Id.desc()).first()
+			else:
+				card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
+			ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
+
+		ses.commit()
+	except:
+		ses.rollback()
+		raise
 
 	return jsonify({ 'deck': deck.serialize() }), 201
 

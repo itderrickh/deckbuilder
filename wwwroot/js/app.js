@@ -36,9 +36,14 @@ app.factory('authHttpResponseInterceptor', ['$q', '$location', '$rootScope', fun
 
                 $location.path('/login');
             } else {
+                var rejectionText = rejection.data.error;
+                if (rejectionText === '') {
+                    rejectionText = 'An error has occurred. Please refresh your page. If the error persists, please file a bug report.';
+                }
+
                 new Noty({
                     theme: 'bootstrap-v4',
-                    text: rejection.data.error,
+                    text: rejectionText,
                     type: 'error',
                     layout: 'bottomCenter',
                     timeout: 3000
@@ -52,7 +57,7 @@ app.factory('authHttpResponseInterceptor', ['$q', '$location', '$rootScope', fun
 app.config(['$httpProvider', function ($httpProvider) {
     //Http Intercpetor to check auth failures for xhr requests
     $httpProvider.interceptors.push('authHttpResponseInterceptor');
-    $httpProvider.interceptors.push(['$rootScope', function ($rootScope) {
+    $httpProvider.interceptors.push(['$rootScope', '$q', function ($rootScope, $q) {
         var activeRequests = 0;
 
         return {
@@ -71,8 +76,14 @@ app.config(['$httpProvider', function ($httpProvider) {
                 }
 
                 return response;
+            },
+            responseError: function(rejection) {
+                activeRequests = 0;
+                $rootScope.pendingRequest = false;
+
+                return $q.reject(rejection);
             }
-        }
+        };
     }]);
 }]);
 
