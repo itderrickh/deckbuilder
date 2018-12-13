@@ -8,7 +8,10 @@ app.service('HomeService', ['$http', '$rootScope', '$cookies', function($http, $
             if(cookieExists && refreshDate > thirtyDaysAgo) {
                 return $http({
                     method: 'GET',
-                    url: 'http://localhost:5000/api/events'
+                    url: 'http://localhost:5000/api/2.0/events/',
+                    headers: {
+                        'Authorization': 'JWT ' + $rootScope.token
+                    }
                 });
             } else {
                 $cookies.put('refreshDate', moment().format("MM-DD-YYYY"));
@@ -18,7 +21,10 @@ app.service('HomeService', ['$http', '$rootScope', '$cookies', function($http, $
         refreshEvents: function() {
             return $http({
                 method: 'GET',
-                url: 'http://localhost:5000/api/events/true'
+                url: 'http://localhost:5000/api/2.0/events/true',
+                headers: {
+                    'Authorization': 'JWT ' + $rootScope.token
+                }
             });
         }
     }

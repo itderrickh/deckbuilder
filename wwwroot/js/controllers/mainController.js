@@ -4,15 +4,19 @@ app.controller('MainController', ['HomeService', function (homeService) {
 
     homeService.getEvents().then(function (response) {
         var events = response.data;
-        for (e in events) {
-            events[e].date = new Date(events[e].date.replace("GMT", ""));
+        var uevents = events.filter(function(element) {
+            return element.event;
+        });
+
+        for (e in uevents) {
+            uevents[e].date = new Date(uevents[e].date.replace("GMT", ""));
         }
 
-        mainCtrl.events = events;
+        mainCtrl.events = uevents;
     });
 
     mainCtrl.eventSource = {
-        url: "http://localhost:5000/api/events",
+        url: "http://localhost:5000/api/2.0/events/",
         className: 'gcal-event',
         currentTimezone: 'America/Chicago'
     };
@@ -37,8 +41,6 @@ app.controller('MainController', ['HomeService', function (homeService) {
         var eventsOnDate = mainCtrl.events.filter(function(value, index) {
             return moment(value.date).isSame(inputDate, 'day');
         });
-        console.log(inputDate);
-        console.log(eventsOnDate);
     };
 
     mainCtrl.eventSources = [mainCtrl.events, mainCtrl.eventSource];

@@ -12,6 +12,9 @@ class UserEvent(Base, Serializer):
 	eventId = Column(Integer, ForeignKey("Events.id"))
 	event = relationship("Event")
 	hidden = Column(Boolean)
+	attended = Column(Boolean)
+	points = Column(Integer)
+	meta = Column(String)
 
 	def serialize(self):
 		d = Serializer.serialize(self)

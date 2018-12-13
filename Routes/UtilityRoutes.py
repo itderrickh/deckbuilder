@@ -54,8 +54,22 @@ def get_home(refresh="false"):
 		res = get_events(request.args.get('start'), request.args.get('end'))
 	return jsonify(Event.serialize_list(res))
 
-@util_routes.route("/api/events/<userId>", methods=['GET'])
-@util_routes.route("/api/events/<userId>/<refresh>", methods=['GET'])
+@util_routes.route("/api/2.0/events/", methods=['GET'])
+@util_routes.route("/api/2.0/events/<refresh>", methods=['GET'])
+@jwt_required
 def get_user_events(refresh="false"):
-	user_events = ses.query(UserEvent).filter(UserEvent.userId==current_identity.id, UserEvent.hidden==False).all()
-	return jsonify(UserEvent.serialize_list(user_events))
+	zipCode = '54904'
+	print(current_identity)
+	if current_identity:
+		zipCode = current_identity.zipCode
+	url = "https://www.pokemon.com/us/play-pokemon/pokemon-events/find-an-event/?country=176&postal_code={}&city=&event_name=&location_name=&address=&state_object=&state_other=&distance_within=250&start_date=0&end_date=90&event_type=tournament&event_type=premier&product_type=tcg&sort_order=when&results_pp=100".format(zipCode)
+	if refresh == "true":
+		events = get_list_from_official(url, request.args.get('start'), request.args.get('end'))
+		user_events = ses.query(UserEvent.id).filter(UserEvent.userId==current_identity.id, UserEvent.hidden==True).all()
+		events = ses.query(Event).filter(Event.Id.notin_(user_events))
+	else:
+		events = get_events(request.args.get('start'), request.args.get('end'))
+		user_events = ses.query(UserEvent.id).filter(UserEvent.userId==current_identity.id, UserEvent.hidden==True).all()
+		events = ses.query(Event).filter(Event.Id.notin_(user_events))
+	
+	return jsonify(Event.serialize_list(events))
