@@ -26,6 +26,26 @@ app.service('HomeService', ['$http', '$rootScope', '$cookies', function($http, $
                     'Authorization': 'JWT ' + $rootScope.token
                 }
             });
+        },
+        hideEvent: function(event) {
+            return $http({
+                method: 'POST',
+                url: 'http://localhost:5000/api/2.0/events/hide',
+                headers: {
+                    'Authorization': 'JWT ' + $rootScope.token
+                },
+                data: { eventId: event.id }
+            });
+        },
+        addEvent: function(event) {
+            return $http({
+                method: 'POST',
+                url: 'http://localhost:5000/api/2.0/events/add',
+                headers: {
+                    'Authorization': 'JWT ' + $rootScope.token
+                },
+                data: { eventId: event.id }
+            });
         }
-    }
+    };
 }]);

@@ -19,6 +19,7 @@ class UserEvent(Base, Serializer):
 	def serialize(self):
 		d = Serializer.serialize(self)
 		del d['user']
+		del d['event']
 		return d
 
 	def serialize_full(self):

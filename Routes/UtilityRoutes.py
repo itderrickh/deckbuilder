@@ -54,22 +54,55 @@ def get_home(refresh="false"):
 		res = get_events(request.args.get('start'), request.args.get('end'))
 	return jsonify(Event.serialize_list(res))
 
+@util_routes.route("/api/2.0/events/hide", methods=['POST'])
+@jwt_required()
+def add_hidden_user_events():
+	content = request.get_json()
+	if len(ses.query(UserEvent.id).filter(UserEvent.userId==current_identity.id, UserEvent.eventId==content['eventId']).all()) <= 0:
+		uevent = UserEvent(userId=current_identity.id, eventId=content['eventId'], hidden=True, attended=False, points=0, meta="")
+		ses.add(uevent)
+		ses.commit()
+		return jsonify(uevent.serialize())
+	else:
+		return jsonify({ 'error': 'Event already has been modified'}), 500
+
+@util_routes.route("/api/2.0/events/add", methods=['POST'])
+@jwt_required()
+def add_user_events():
+	content = request.get_json()
+	if len(ses.query(UserEvent.id).filter(UserEvent.userId==current_identity.id, UserEvent.eventId==content['eventId']).all()) <= 0:
+		uevent = UserEvent(userId=current_identity.id, eventId=content['eventId'], hidden=False, attended=False, points=0, meta="")
+		ses.add(uevent)
+		ses.commit()
+		return jsonify(uevent.serialize())
+	else:
+		return jsonify({ 'error': 'Event already has been modified'}), 500
+
+@util_routes.route("/api/2.0/events/user", methods=['GET'])
+@jwt_required()
+def get_user_current_events():
+	user_events = ses.query(UserEvent.eventId).filter(UserEvent.userId==current_identity.id, UserEvent.hidden==False).all()
+	user_events_ids = [value for value, in user_events]
+	events = get_events(request.args.get('start'), request.args.get('end'))
+	events = ses.query(Event).filter(Event.id.in_(user_events_ids))
+
+	return jsonify(Event.serialize_list(events))
+
 @util_routes.route("/api/2.0/events/", methods=['GET'])
 @util_routes.route("/api/2.0/events/<refresh>", methods=['GET'])
-@jwt_required
+@jwt_required()
 def get_user_events(refresh="false"):
 	zipCode = '54904'
-	print(current_identity)
 	if current_identity:
 		zipCode = current_identity.zipCode
 	url = "https://www.pokemon.com/us/play-pokemon/pokemon-events/find-an-event/?country=176&postal_code={}&city=&event_name=&location_name=&address=&state_object=&state_other=&distance_within=250&start_date=0&end_date=90&event_type=tournament&event_type=premier&product_type=tcg&sort_order=when&results_pp=100".format(zipCode)
+	user_events = ses.query(UserEvent.eventId).filter(UserEvent.userId==current_identity.id).all()
+	user_events_ids = [value for value, in user_events]
 	if refresh == "true":
 		events = get_list_from_official(url, request.args.get('start'), request.args.get('end'))
-		user_events = ses.query(UserEvent.id).filter(UserEvent.userId==current_identity.id, UserEvent.hidden==True).all()
-		events = ses.query(Event).filter(Event.Id.notin_(user_events))
+		events = ses.query(Event).filter(Event.id.notin_(user_events_ids))
 	else:
 		events = get_events(request.args.get('start'), request.args.get('end'))
-		user_events = ses.query(UserEvent.id).filter(UserEvent.userId==current_identity.id, UserEvent.hidden==True).all()
-		events = ses.query(Event).filter(Event.Id.notin_(user_events))
-	
+		events = ses.query(Event).filter(Event.id.notin_(user_events_ids))
+
 	return jsonify(Event.serialize_list(events))

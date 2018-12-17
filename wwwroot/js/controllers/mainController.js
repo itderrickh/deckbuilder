@@ -1,24 +1,25 @@
-app.controller('MainController', ['HomeService', function (homeService) {
+app.controller('MainController', ['$rootScope', 'HomeService', function ($rootScope, homeService) {
     var mainCtrl = this;
     mainCtrl.events = [];
+    mainCtrl.userEvents = [];
 
     homeService.getEvents().then(function (response) {
         var events = response.data;
-        var uevents = events.filter(function(element) {
-            return element.event;
-        });
 
-        for (e in uevents) {
-            uevents[e].date = new Date(uevents[e].date.replace("GMT", ""));
+        for (e in events) {
+            events[e].date = new Date(events[e].date.replace("GMT", ""));
         }
 
-        mainCtrl.events = uevents;
+        mainCtrl.events = events;
     });
 
     mainCtrl.eventSource = {
-        url: "http://localhost:5000/api/2.0/events/",
+        url: "http://localhost:5000/api/2.0/events/user",
         className: 'gcal-event',
-        currentTimezone: 'America/Chicago'
+        currentTimezone: 'America/Chicago',
+        headers: {
+            'Authorization': 'JWT ' + $rootScope.token
+        }
     };
 
     mainCtrl.eventClick = function (date, jsEvent, view) {
@@ -35,15 +36,7 @@ app.controller('MainController', ['HomeService', function (homeService) {
         );
     };
 
-    mainCtrl.dayClick = function(date) {
-        var inverseOffset = moment(new Date()).utcOffset() * -1;
-        var inputDate = moment(date).utcOffset(inverseOffset);
-        var eventsOnDate = mainCtrl.events.filter(function(value, index) {
-            return moment(value.date).isSame(inputDate, 'day');
-        });
-    };
-
-    mainCtrl.eventSources = [mainCtrl.events, mainCtrl.eventSource];
+    mainCtrl.eventSources = [mainCtrl.userEvents, mainCtrl.eventSource];
 
     mainCtrl.uiConfig = {
         calendar: {
@@ -54,8 +47,52 @@ app.controller('MainController', ['HomeService', function (homeService) {
                 center: '',
                 right: 'today prev,next'
             },
-            eventClick: mainCtrl.eventClick,
-            dayClick: mainCtrl.dayClick
+            eventClick: mainCtrl.eventClick
         }
+    };
+
+    mainCtrl.hideEvent = function(event) {
+        homeService.hideEvent(event).then(function(res) {
+            homeService.getEvents().then(function (response) {
+                var events = response.data;
+
+                for (e in events) {
+                    events[e].date = new Date(events[e].date.replace("GMT", ""));
+                }
+
+                mainCtrl.events = events;
+
+                new Noty({
+                    theme: 'bootstrap-v4',
+                    text: 'Event has been hidden',
+                    type: 'info',
+                    layout: 'bottomCenter',
+                    timeout: 3000
+                }).show();
+            });
+        });
+    };
+
+    mainCtrl.addEvent = function(event) {
+        mainCtrl.userEvents.push(event);
+        homeService.addEvent(event).then(function(res) {
+            homeService.getEvents().then(function (response) {
+                var events = response.data;
+
+                for (e in events) {
+                    events[e].date = new Date(events[e].date.replace("GMT", ""));
+                }
+
+                mainCtrl.events = events;
+
+                new Noty({
+                    theme: 'bootstrap-v4',
+                    text: 'Event has been added to your calendar',
+                    type: 'info',
+                    layout: 'bottomCenter',
+                    timeout: 3000
+                }).show();
+            });
+        });
     };
 }]);
