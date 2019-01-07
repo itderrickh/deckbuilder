@@ -17,16 +17,11 @@ from threading import Thread
 import random
 import urllib
 from Helpers.UrlOpener import MyOpener, DOWNLOADS_DIR, download_cards_if_not_exists
+from Helpers.SetHelper import getSet, getSetCode
 
 pdf_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../pdfgen')
 deck_routes = Blueprint('deck_routes', __name__,
 						template_folder='templates')
-
-def getSet(sets, setCode):
-	return next(s.name for s in sets if s.setName == setCode)
-
-def getSetCode(sets, setName):
-	return next((s.setName for s in sets if s.name == setName), "")
 
 @deck_routes.route("/api/deck/bulk", methods=['POST'])
 @jwt_required()
@@ -129,6 +124,7 @@ def import_limitless_deck():
 				card = ses.query(Card).filter(Card.name==value['card']).order_by(Card.Id.desc()).first()
 			else:
 				card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
+			print(value['card'])
 			ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 		ses.commit()
