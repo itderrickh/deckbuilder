@@ -30,23 +30,23 @@ def write_to_pdf(cards, user, outputPDF):
     can = canvas.Canvas(packet, pagesize=letter)
 
     # Name and ID
-    can.drawString(93, 687, user.name)
-    can.drawString(281, 687, user.playerid)
+    can.drawString(98, 697, user.name)
+    can.drawString(291, 697, user.playerid)
 
     # Bday
-    can.drawString(495, 687, str(bd.month))
-    can.drawString(522, 687, str(bd.day))
-    can.drawString(547, 687, str(bd.year))
+    can.drawString(505, 697, str(bd.month))
+    can.drawString(532, 697, str(bd.day))
+    can.drawString(557, 697, str(bd.year))
 
     if bd.year <= 2002:
         # Masters
-        can.drawString(375, 640, "x")
+        can.drawString(385, 650, "x")
     elif bd.year >= 2003 and bd.year <= 2006:
         # Seniors
-        can.drawString(375, 654, "x")
+        can.drawString(385, 664, "x")
     else:
         # Juniors
-        can.drawString(375, 667, "x")
+        can.drawString(385, 677, "x")
 
     # Pokemon
     if(len(pokemon) > 10):
@@ -55,13 +55,13 @@ def write_to_pdf(cards, user, outputPDF):
     maxPokemon = min(len(pokemon), 10)
     for i in list(range(0, maxPokemon)):
         # Count
-        can.drawString(286, 586 - (i * 13.2), str(pokemon[i].count))
+        can.drawString(291, 595 - (i * 13.2), str(pokemon[i].count))
         # Name
-        can.drawString(320, 586 - (i * 13.2), pokemon[i].name)
+        can.drawString(325, 595 - (i * 13.2), pokemon[i].name)
         # Set
-        can.drawString(486, 586 - (i * 13.2), pokemon[i].setName)
+        can.drawString(491, 595 - (i * 13.2), pokemon[i].setName)
         # Number
-        can.drawString(534, 586 - (i * 13.2), pokemon[i].number)
+        can.drawString(539, 595 - (i * 13.2), pokemon[i].number)
 
     # Trainers
     if(len(trainers) > 18):
@@ -69,8 +69,8 @@ def write_to_pdf(cards, user, outputPDF):
 
     maxtrainers = min(len(trainers), 18)
     for i in list(range(0, maxtrainers)):
-        can.drawString(286, 410 - (i * 13.2), str(trainers[i].count))
-        can.drawString(320, 410 - (i * 13.2), trainers[i].name)
+        can.drawString(291, 419 - (i * 13.2), str(trainers[i].count))
+        can.drawString(325, 419 - (i * 13.2), trainers[i].name)
 
     # Energy
     if(len(energy) > 18):
@@ -78,8 +78,8 @@ def write_to_pdf(cards, user, outputPDF):
 
     maxenergy = min(len(energy), 4)
     for i in list(range(0, maxenergy)):
-        can.drawString(286, 128 - (i * 13.2), str(energy[i].count))
-        can.drawString(320, 128 - (i * 13.2), energy[i].name)
+        can.drawString(286, 137 - (i * 13.2), str(energy[i].count))
+        can.drawString(320, 137 - (i * 13.2), energy[i].name)
 
     can.save()
 

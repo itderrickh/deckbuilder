@@ -33,7 +33,7 @@
 * 1 Beast Energy {*} FLI 117
 * 4 Rainbow Energy SUM 137
 * 1 Counter Energy CIN 100
-* 4 Unit Energy {F}{D}{Y} FLI 118
+* 4 Unit Energy FDY FLI 118
 
 Total Cards - 60
 
