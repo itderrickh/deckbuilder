@@ -11,12 +11,10 @@ import requests
 import os
 import urllib
 from Helpers.UrlOpener import MyOpener, DOWNLOADS_DIR, download_cards_if_not_exists
+from Helpers.SetHelper import getSetCode
 
 card_routes = Blueprint('card_routes', __name__,
                         template_folder='templates')
-
-def getSet(sets, setName):
-	return next((s.setName for s in sets if s.name == setName), "")
 
 @card_routes.route("/api/cards/deck/<deckid>", methods=['GET'])
 @jwt_required()
@@ -30,7 +28,7 @@ def get_cards(deckid):
 	for card in cards:
 		card.count = next(r.count for r in res if card.Id==r.cardId)
 		if card.type != "Energy":
-			card.setName = getSet(sets, card.setName)
+			card.setName = getSetCode(sets, card.setName)
 	return jsonify(Card.serialize_list(cards))
 
 @card_routes.route("/api/cards/deck/export/<deckid>", methods=['GET'])
@@ -44,7 +42,7 @@ def get_cards_export(deckid):
 	for card in cards:
 		card.count = next(r.count for r in res if card.Id==r.cardId)
 		if card.type != "Energy":
-			card.setName = getSet(sets, card.setName)
+			card.setName = getSetCode(sets, card.setName)
 	return jsonify({ 'deck': Card.serialize_list(cards), 'text': create_deck_list(cards)})
 
 @card_routes.route("/api/cards", methods=['GET'])

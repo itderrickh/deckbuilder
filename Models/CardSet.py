@@ -10,6 +10,8 @@ class CardSet(Base, Serializer):
     name = Column(String)
     setName = Column(String)
     standard = Column(Boolean)
+    shortName = Column(String)
+    fileName = Column(String)
 
     def serialize(self):
         d = Serializer.serialize(self)
