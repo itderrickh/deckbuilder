@@ -1,7 +1,7 @@
 {
   "name": "deckbuilder",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
+  "description": "Consolidating deck builder, deck min, and draw calc into one pokemon tcg solution.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -44,6 +44,7 @@
     "moment": "^2.23.0",
     "ngclipboard": "^2.0.0",
     "noty": "^3.2.0-beta",
+    "popper.js": "^1.14.6",
     "sweetalert2": "^7.33.1"
   }
 }

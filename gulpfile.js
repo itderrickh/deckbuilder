@@ -30,6 +30,7 @@ gulp.task('pack-vendor-js', function () {
 		'node_modules/moment/min/moment.min.js',
 		'node_modules/fullcalendar/dist/fullcalendar.min.js',
 		'node_modules/angular-ui-calendar/src/calendar.js',
+		'node_modules/popper.js/dist/umd/popper.min.js',
 		'node_modules/bootstrap/dist/js/bootstrap.min.js',
 		'node_modules/clipboard/dist/clipboard.min.js',
 		'node_modules/@fortawesome/fontawesome-free/js/all.min.js',
@@ -51,6 +52,8 @@ gulp.task('pack-css', function () {
 			'node_modules/bootstrap/dist/css/bootstrap-grid.min.css',
 			'node_modules/fullcalendar/dist/fullcalendar.min.css',
 			'node_modules/noty/lib/noty.css',
+			'node_modules/noty/lib/themes/bootstrap-v4.css',
+			'node_modules/sweetalert2/dist/sweetalert2.min.css',
 			'wwwroot/css/*.css'
 		])
 		.pipe(concat('stylesheet.css'))

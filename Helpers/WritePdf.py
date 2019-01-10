@@ -7,7 +7,7 @@ import datetime
 import os
 from AppState.Session import ses
 
-pdf_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pdfgen')
+pdf_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../pdfgen')
 def write_to_pdf(cards, user, outputPDF):
     warnings = list()
     bd = user.dateofbirth
@@ -30,23 +30,23 @@ def write_to_pdf(cards, user, outputPDF):
     can = canvas.Canvas(packet, pagesize=letter)
 
     # Name and ID
-    can.drawString(98, 697, user.name)
+    can.drawString(102, 697, user.name)
     can.drawString(291, 697, user.playerid)
 
     # Bday
-    can.drawString(505, 697, str(bd.month))
-    can.drawString(532, 697, str(bd.day))
+    can.drawString(504, 697, str(bd.month))
+    can.drawString(531, 697, str(bd.day))
     can.drawString(557, 697, str(bd.year))
 
-    if bd.year <= 2002:
+    if bd.year <= 2003:
         # Masters
-        can.drawString(385, 650, "x")
-    elif bd.year >= 2003 and bd.year <= 2006:
+        can.drawString(384, 650, "x")
+    elif bd.year > 2003 and bd.year <= 2007:
         # Seniors
-        can.drawString(385, 664, "x")
+        can.drawString(384, 664, "x")
     else:
         # Juniors
-        can.drawString(385, 677, "x")
+        can.drawString(384, 677, "x")
 
     # Pokemon
     if(len(pokemon) > 10):

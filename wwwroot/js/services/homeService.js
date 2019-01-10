@@ -3,12 +3,12 @@ app.service('HomeService', ['$http', '$rootScope', '$cookies', function($http, $
         getEvents: function() {
             var cookieExists = $cookies.get('refreshDate');
             var refreshDate = moment($cookies.get('refreshDate'));
-            var thirtyDaysAgo = moment().add(-30, 'days');
+            var sevenDaysAgo = moment().add(-7, 'days');
 
-            if(cookieExists && refreshDate > thirtyDaysAgo) {
+            if(cookieExists && refreshDate > sevenDaysAgo) {
                 return $http({
                     method: 'GET',
-                    url: 'http://localhost:5000/api/2.0/events/',
+                    url: 'http://localhost:5000/api/events/',
                     headers: {
                         'Authorization': 'JWT ' + $rootScope.token
                     }
@@ -21,7 +21,7 @@ app.service('HomeService', ['$http', '$rootScope', '$cookies', function($http, $
         refreshEvents: function() {
             return $http({
                 method: 'GET',
-                url: 'http://localhost:5000/api/2.0/events/true',
+                url: 'http://localhost:5000/api/events/true',
                 headers: {
                     'Authorization': 'JWT ' + $rootScope.token
                 }
@@ -30,7 +30,7 @@ app.service('HomeService', ['$http', '$rootScope', '$cookies', function($http, $
         hideEvent: function(event) {
             return $http({
                 method: 'POST',
-                url: 'http://localhost:5000/api/2.0/events/hide',
+                url: 'http://localhost:5000/api/events/hide',
                 headers: {
                     'Authorization': 'JWT ' + $rootScope.token
                 },
@@ -40,7 +40,7 @@ app.service('HomeService', ['$http', '$rootScope', '$cookies', function($http, $
         addEvent: function(event) {
             return $http({
                 method: 'POST',
-                url: 'http://localhost:5000/api/2.0/events/add',
+                url: 'http://localhost:5000/api/events/add',
                 headers: {
                     'Authorization': 'JWT ' + $rootScope.token
                 },

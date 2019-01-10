@@ -1,7 +1,7 @@
-app.controller('MainController', ['$rootScope', 'HomeService', function ($rootScope, homeService) {
-    var mainCtrl = this;
-    mainCtrl.events = [];
-    mainCtrl.userEvents = [];
+app.controller('HomeController', ['$rootScope', 'HomeService', function ($rootScope, homeService) {
+    var homeCtrl = this;
+    homeCtrl.events = [];
+    homeCtrl.userEvents = [];
 
     homeService.getEvents().then(function (response) {
         var events = response.data;
@@ -10,11 +10,11 @@ app.controller('MainController', ['$rootScope', 'HomeService', function ($rootSc
             events[e].date = new Date(events[e].date.replace("GMT", ""));
         }
 
-        mainCtrl.events = events;
+        homeCtrl.events = events;
     });
 
-    mainCtrl.eventSource = {
-        url: "http://localhost:5000/api/2.0/events/user",
+    homeCtrl.eventSource = {
+        url: "http://localhost:5000/api/events/user",
         className: 'gcal-event',
         currentTimezone: 'America/Chicago',
         headers: {
@@ -22,7 +22,7 @@ app.controller('MainController', ['$rootScope', 'HomeService', function ($rootSc
         }
     };
 
-    mainCtrl.eventClick = function (date, jsEvent, view) {
+    homeCtrl.eventClick = function (date, jsEvent, view) {
         date.date = date.date.replace("GMT", "");
         var formatDate = moment(date.date).format("dddd, MMMM Do YYYY @ hh:mm a");
         var splitLoc = date.location.split(", ");
@@ -36,9 +36,9 @@ app.controller('MainController', ['$rootScope', 'HomeService', function ($rootSc
         );
     };
 
-    mainCtrl.eventSources = [mainCtrl.userEvents, mainCtrl.eventSource];
+    homeCtrl.eventSources = [homeCtrl.userEvents, homeCtrl.eventSource];
 
-    mainCtrl.uiConfig = {
+    homeCtrl.uiConfig = {
         calendar: {
             height: 450,
             editable: false,
@@ -47,11 +47,11 @@ app.controller('MainController', ['$rootScope', 'HomeService', function ($rootSc
                 center: '',
                 right: 'today prev,next'
             },
-            eventClick: mainCtrl.eventClick
+            eventClick: homeCtrl.eventClick
         }
     };
 
-    mainCtrl.hideEvent = function(event) {
+    homeCtrl.hideEvent = function(event) {
         homeService.hideEvent(event).then(function(res) {
             homeService.getEvents().then(function (response) {
                 var events = response.data;
@@ -60,7 +60,7 @@ app.controller('MainController', ['$rootScope', 'HomeService', function ($rootSc
                     events[e].date = new Date(events[e].date.replace("GMT", ""));
                 }
 
-                mainCtrl.events = events;
+                homeCtrl.events = events;
 
                 new Noty({
                     theme: 'bootstrap-v4',
@@ -73,8 +73,8 @@ app.controller('MainController', ['$rootScope', 'HomeService', function ($rootSc
         });
     };
 
-    mainCtrl.addEvent = function(event) {
-        mainCtrl.userEvents.push(event);
+    homeCtrl.addEvent = function(event) {
+        homeCtrl.userEvents.push(event);
         homeService.addEvent(event).then(function(res) {
             homeService.getEvents().then(function (response) {
                 var events = response.data;
@@ -83,7 +83,7 @@ app.controller('MainController', ['$rootScope', 'HomeService', function ($rootSc
                     events[e].date = new Date(events[e].date.replace("GMT", ""));
                 }
 
-                mainCtrl.events = events;
+                homeCtrl.events = events;
 
                 new Noty({
                     theme: 'bootstrap-v4',

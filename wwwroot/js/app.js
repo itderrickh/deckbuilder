@@ -122,14 +122,14 @@ app.run(['$rootScope', '$location', '$http', 'tokenToUser', function ($rootScope
 
 app.config(['$routeProvider', function ($routeProvider) {
     var resolve = function (token) {
-        return typeof (token) !== 'undefined' && token !== '';
+        return typeof token !== 'undefined' && token !== '';
     };
 
     $routeProvider
         .when("/", {
-            templateUrl: "./views/main.html",
-            controller: "MainController",
-            controllerAs: "mainCtrl"
+            templateUrl: "./views/home.html",
+            controller: "HomeController",
+            controllerAs: "homeCtrl"
         })
         .when("/register", {
             templateUrl: "./views/register.html",

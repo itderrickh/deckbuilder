@@ -7,7 +7,7 @@ from Models.CardSet import CardSet
 from flask.json import jsonify
 from AppState.Session import ses, ElasticStore
 from Helpers.DeckLib import create_deck_list, get_deck_from_source, get_deck_from_limitless_tcg
-from writepdf import write_to_pdf
+from Helpers.WritePdf import write_to_pdf
 from Helpers.Deckmin import get_shared_decklist, print_deck
 import uuid
 import os
@@ -16,6 +16,7 @@ import copy
 from threading import Thread
 import random
 import urllib
+import json
 from Helpers.UrlOpener import MyOpener, DOWNLOADS_DIR, download_cards_if_not_exists
 from Helpers.SetHelper import getSet, getSetCode
 
@@ -68,6 +69,10 @@ def get_sample_hand(deckid):
 	lastList = fullDeck[:7]
 	return jsonify(Card.serialize_list(lastList))
 
+class Struct:
+    def __init__(self, **entries):
+        self.__dict__.update(entries)
+
 @deck_routes.route("/api/decks/import", methods=['POST'])
 @jwt_required()
 def add_deck():
@@ -95,7 +100,7 @@ def add_deck():
 			if card is None:
 				print(value['card'])
 				cards = ElasticStore.search(index="card-index", body={"size": 1, "query": {"match": { "name": value['card'] }}})
-				card = cards['hits']['hits'][0]['_source']
+				card = Struct(**cards['hits']['hits'][0]['_source'])
 
 			ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 

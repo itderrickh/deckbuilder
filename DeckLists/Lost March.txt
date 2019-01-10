@@ -25,8 +25,8 @@
 
 ##Energy - 8
 
-* 3 Grass Energy 6
-* 1 Super Boost Energy {*} FLI 136
+* 3 Grass Energy 1
+* 1 Super Boost Energy {*} UPR 136
 * 4 Double Colorless Energy SM 136
 
 Total Cards - 60
