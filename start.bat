@@ -1,3 +1,5 @@
+CALL npm install
+
 set FLASK_APP=server.py
 
-gulp
+CALL gulp
