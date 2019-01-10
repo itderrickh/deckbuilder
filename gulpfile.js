@@ -6,7 +6,10 @@ const shell = require('gulp-shell');
 const order = require("gulp-order");
 
 gulp.task('pack-js', function () {
-	return gulp.src(['wwwroot/js/*.js', 'wwwroot/js/controllers/*.js', 'wwwroot/js/services/*.js'])
+	return gulp.src([
+			'wwwroot/js/*.js',
+			'wwwroot/js/controllers/*.js',
+			'wwwroot/js/services/*.js'])
 		.pipe(concat('bundle.js'))
 		.pipe(minify({
 			ext: {
@@ -18,36 +21,36 @@ gulp.task('pack-js', function () {
 });
 
 gulp.task('pack-vendor-js', function () {
-	return gulp.src('wwwroot/lib/js/*.js')
-		.pipe(order([
-			'wwwroot/lib/js/jquery-3.3.1.min.js',
-			'wwwroot/lib/js/angular.min.js',
-			'wwwroot/lib/js/angular-route.js',
-			'wwwroot/lib/js/angucomplete-alt.min.js',
-			'wwwroot/lib/js/angular-cookie.min.js',
-			//'wwwroot/lib/js/spin.js',
-			//'wwwroot/lib/js/angular-spinner.min.js',
-			'wwwroot/lib/js/moment.js',
-			'wwwroot/lib/js/fullcalendar.min.js',
-			'wwwroot/lib/js/calendar.js',
-			'wwwroot/lib/js/bootstrap.min.js',
-			'wwwroot/lib/js/clipboard.min.js',
-			'wwwroot/lib/js/fontawesome-all.min.js',
-			'wwwroot/lib/js/ngclipboard.min.js',
-			'wwwroot/lib/js/sweetalert2.min.js',
-			'wwwroot/lib/js/noty.min.js',
-			'wwwroot/lib/js/autosize.min.js'
-		], { base: './' }))
+	var vendorFiles = [
+		'node_modules/jquery/dist/jquery.min.js',
+		'node_modules/angular/angular.min.js',
+		'node_modules/angular-route/angular-route.min.js',
+		'node_modules/angucomplete-alt/dist/angucomplete-alt.min.js',
+		'node_modules/angular-cookies/angular-cookies.min.js',
+		'node_modules/moment/min/moment.min.js',
+		'node_modules/fullcalendar/dist/fullcalendar.min.js',
+		'node_modules/angular-ui-calendar/src/calendar.js',
+		'node_modules/bootstrap/dist/js/bootstrap.min.js',
+		'node_modules/clipboard/dist/clipboard.min.js',
+		'node_modules/@fortawesome/fontawesome-free/js/all.min.js',
+		'node_modules/ngclipboard/dist/ngclipboard.min.js',
+		'node_modules/sweetalert2/dist/sweetalert2.min.js',
+		'node_modules/noty/lib/noty.min.js',
+		'node_modules/autosize/dist/autosize.min.js'
+	];
+
+	return gulp.src(vendorFiles)
+		.pipe(order(vendorFiles, { base: './' }))
 		.pipe(concat('vendor.js'))
 		.pipe(gulp.dest('wwwroot/build/js'));
 });
 
 gulp.task('pack-css', function () {
 	return gulp.src([
-			'wwwroot/lib/css/bootstrap.base.min.css',
-			'wwwroot/lib/css/bootstrap-grid.min.css',
-			'wwwroot/lib/css/fullcalendar.min.css',
-			'wwwroot/lib/css/noty.min.css',
+			'node_modules/bootstrap/dist/css/bootstrap.min.css',
+			'node_modules/bootstrap/dist/css/bootstrap-grid.min.css',
+			'node_modules/fullcalendar/dist/fullcalendar.min.css',
+			'node_modules/noty/lib/noty.css',
 			'wwwroot/css/*.css'
 		])
 		.pipe(concat('stylesheet.css'))

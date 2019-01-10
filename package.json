@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/itderrickh/deckbuilder#readme",
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.6.3",
     "gulp": "^3.9.1",
     "gulp-clean-css": "^3.9.4",
     "gulp-concat": "^2.6.1",
@@ -28,6 +29,21 @@
     "gulp-order": "^1.1.1"
   },
   "dependencies": {
-    "gulp-shell": "^0.6.5"
+    "angucomplete-alt": "^3.0.0",
+    "angular": "^1.7.5",
+    "angular-cookies": "^1.7.5",
+    "angular-route": "^1.7.5",
+    "angular-ui-calendar": "^1.0.2",
+    "autosize": "^4.0.2",
+    "bootstrap": "^4.2.1",
+    "clipboard": "^2.0.4",
+    "font-awesome": "^4.7.0",
+    "fullcalendar": "^3.9.0",
+    "gulp-shell": "^0.6.5",
+    "jquery": "^3.3.1",
+    "moment": "^2.23.0",
+    "ngclipboard": "^2.0.0",
+    "noty": "^3.2.0-beta",
+    "sweetalert2": "^7.33.1"
   }
 }

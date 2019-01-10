@@ -5,7 +5,7 @@ from Models.Card import Card
 from Models.DeckCard import DeckCard
 from Models.CardSet import CardSet
 from flask.json import jsonify
-from AppState.Session import ses
+from AppState.Session import ses, ElasticStore
 from Helpers.DeckLib import create_deck_list, get_deck_from_source, get_deck_from_limitless_tcg
 from writepdf import write_to_pdf
 from Helpers.Deckmin import get_shared_decklist, print_deck
@@ -91,6 +91,12 @@ def add_deck():
 				card = ses.query(Card).filter(Card.name==value['card']).order_by(Card.Id.desc()).first()
 			else:
 				card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
+
+			if card is None:
+				print(value['card'])
+				cards = ElasticStore.search(index="card-index", body={"size": 1, "query": {"match": { "name": value['card'] }}})
+				card = cards['hits']['hits'][0]['_source']
+
 			ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 		ses.commit()
@@ -124,7 +130,11 @@ def import_limitless_deck():
 				card = ses.query(Card).filter(Card.name==value['card']).order_by(Card.Id.desc()).first()
 			else:
 				card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
-			print(value['card'])
+
+			if card is None:
+				print(value['card'])
+				cards = ElasticStore.search(index="card-index", body={"size": 1, "query": {"match": { "name": value['card'] }}})
+				card = cards['hits']['hits'][0]['_source']
 			ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
 		ses.commit()
