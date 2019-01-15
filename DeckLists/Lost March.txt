@@ -27,7 +27,7 @@
 
 * 3 Grass Energy 1
 * 1 Super Boost Energy {*} UPR 136
-* 4 Double Colorless Energy SM 136
+* 4 Double Colorless Energy SUM 136
 
 Total Cards - 60
 

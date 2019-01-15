@@ -2,10 +2,15 @@ import os
 import requests
 from lxml import html
 from unidecode import unidecode
+from .EnergyParser import parse_energy
+from Models.CardSet import CardSet
+from AppState.Session import ses
 
 def get_deck_from_source(text):
     ''' Loops over lines and pulls out data '''
     deck = dict()
+    sets = ses.query(CardSet.setName).all()
+    sets = [i for (i,) in sets]
     full_text = text.split("\n")
     card_type = ""
     if text.startswith("Pokemon"):
@@ -19,12 +24,16 @@ def get_deck_from_source(text):
                 text = line[2:]
                 splitter = text.split(" ")
                 # Get the last words (which are the card name)
-                card = ' '.join(str(x) for x in splitter[1:len(splitter) - 1])
-                cardName = ' '.join(str(x) for x in splitter[1:len(splitter) - 2])
-                if card not in deck:
-                    deck[card] = { 'count': int(splitter[0]), 'set': splitter[len(splitter) - 2], 'card': unidecode(cardName), 'type': card_type, 'number': splitter[len(splitter) - 1] }
+                if card_type == "Energy":
+                    c1, e1, s1, n1 = parse_energy(text, sets)
+                    deck[e1] = { 'count': c1, 'set': s1, 'card': e1, 'type': 'Energy', 'number': n1 }
                 else:
-                    deck[card]['count'] += int(splitter[0])
+                    card = ' '.join(str(x) for x in splitter[1:len(splitter) - 1])
+                    cardName = ' '.join(str(x) for x in splitter[1:len(splitter) - 2])
+                    if card not in deck:
+                        deck[card] = { 'count': int(splitter[0]), 'set': splitter[len(splitter) - 2], 'card': unidecode(cardName), 'type': card_type, 'number': splitter[len(splitter) - 1] }
+                    else:
+                        deck[card]['count'] += int(splitter[0])
     return deck
 
 def create_deck_list(cards):
@@ -67,6 +76,8 @@ def get_deck_from_limitless_tcg(url):
 def get_from_text(text):
     ''' Gets the deck from a special limitless export format '''
     deck = dict()
+    sets = ses.query(CardSet.setName).all()
+    sets = [i for (i,) in sets]
     full_text = text.split("\n")
     card_type = ""
     for line in full_text:
@@ -88,11 +99,15 @@ def get_from_text(text):
 
         if not (full_check or line.strip() == ""):
             splitter = line.rstrip("\r").split(" ")
-            # Get the last words (which are the card name)
-            card = ' '.join(str(x) for x in splitter[1:len(splitter) - 1])
-            cardName = ' '.join(str(x) for x in splitter[1:len(splitter) - 2])
-            if card not in deck:
-                deck[card] = { 'count': int(splitter[0]), 'set': splitter[len(splitter) - 2], 'card': unidecode(cardName), 'type': card_type, 'number': splitter[len(splitter) - 1] }
+            if card_type == "Energy":
+                c1, e1, s1, n1 = parse_energy(line.rstrip("\r"), sets)
+                deck[e1] = { 'count': c1, 'set': s1, 'card': e1, 'type': card_type, 'number': n1 }
             else:
-                deck[card]['count'] += int(splitter[0])
+                # Get the last words (which are the card name)
+                card = ' '.join(str(x) for x in splitter[1:len(splitter) - 1])
+                cardName = ' '.join(str(x) for x in splitter[1:len(splitter) - 2])
+                if card not in deck:
+                    deck[card] = { 'count': int(splitter[0]), 'set': splitter[len(splitter) - 2], 'card': unidecode(cardName), 'type': card_type, 'number': splitter[len(splitter) - 1] }
+                else:
+                    deck[card]['count'] += int(splitter[0])
     return deck

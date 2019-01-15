@@ -11,6 +11,7 @@ from AppState.Session import Engine
 from passlib.hash import pbkdf2_sha256
 from unidecode import unidecode
 from Helpers.DeckLib import get_deck_from_source
+from Helpers.SetHelper import getSet
 import datetime
 import json
 import glob
@@ -18,9 +19,6 @@ import os
 
 Base.metadata.bind = Engine
 Base.metadata.create_all()
-
-def getSet(sets, setCode):
-	return next(s.name for s in sets if s.setName == setCode)
 
 def seed():
     if len(ses.query(CardSet).all()) <= 0:
@@ -137,7 +135,7 @@ def seed():
                         retreatCost=d.get('convertedRetreatCost'),
                         artist=d['artist'],
                         rarity=d.get('rarity'),
-                        setName=d['series'] + " - " + d['set'],
+                        setName=d['set'],
                         setCode=d['setCode'],
                         types=d.get('types'),
                         localImageUrl="/" + d['setCode'] + "/" + d.get('number') + ".png",
@@ -190,7 +188,9 @@ def seed():
                             card = ses.query(Card).filter(Card.name==value['card']).order_by(Card.Id.desc()).first()
                         else:
                             card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
-                        print(value['card'])
+                        if card is None:
+                            cards = ElasticStore.search(index="card-index", body={"size": 1, "query": {"match": { "name": value['card'] }}})
+                            card = cards['hits']['hits'][0]['_source']
                         ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
                     ses.commit()

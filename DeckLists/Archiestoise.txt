@@ -35,7 +35,7 @@
 
 ##Energy - 10
 
-* 10 Basic Water Energy
+* 10 Water Energy
 
 Total Cards - 60
 

@@ -17,7 +17,7 @@
 * 2 Exeggcute PLF 4
 * 3 Zorua DEX 70
 * 1 Trubbish NVI 48
-* 1 Zoroark  71
+* 1 Zoroark BLW 71
 * 1 Ditto Prism Star LOT 154
 
 ##Trainer Cards - 29
@@ -37,7 +37,7 @@
 * 1 Super Rod DRV 20
 * 4 Ultra Ball DEX 102
 * 1 N NVI 92
-* 1 Pokemon Communication  99
+* 1 Pokemon Communication BLW 99
 * 1 Faba LOT 173
 
 ##Energy - 6
