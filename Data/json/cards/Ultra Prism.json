@@ -4956,7 +4956,8 @@
         "value": "-20"
       }
     ],
-    "imageUrlHiRes": "https://images.pokemontcg.io/sm5/94_hires.png"
+    "imageUrlHiRes": "https://images.pokemontcg.io/sm5/94_hires.png",
+    "nationalPokedexNumber": 786
   },
   {
     "id": "sm5-95",
@@ -6075,7 +6076,8 @@
         "value": "×2"
       }
     ],
-    "imageUrlHiRes": "https://images.pokemontcg.io/sm5/115_hires.png"
+    "imageUrlHiRes": "https://images.pokemontcg.io/sm5/115_hires.png",
+    "nationalPokedexNumber": 772
   },
   {
     "id": "sm5-116",
@@ -6522,7 +6524,7 @@
   },
   {
     "id": "sm5-137",
-    "name": "Unit Energy GFW",
+    "name": "Unit Energy GrassFireWater",
     "imageUrl": "https://images.pokemontcg.io/sm5/137.png",
     "subtype": "Special",
     "supertype": "Energy",
@@ -6539,7 +6541,7 @@
   },
   {
     "id": "sm5-138",
-    "name": "Unit Energy LPM",
+    "name": "Unit Energy LightningPsychicMetal",
     "imageUrl": "https://images.pokemontcg.io/sm5/138.png",
     "subtype": "Special",
     "supertype": "Energy",
@@ -8023,7 +8025,7 @@
   },
   {
     "id": "sm5-170",
-    "name": "Unit Energy GFW",
+    "name": "Unit Energy GrassFireWater",
     "imageUrl": "https://images.pokemontcg.io/sm5/170.png",
     "subtype": "Special",
     "supertype": "Energy",
@@ -8040,7 +8042,7 @@
   },
   {
     "id": "sm5-171",
-    "name": "Unit Energy LPM",
+    "name": "Unit Energy LightningPsychicMetal",
     "imageUrl": "https://images.pokemontcg.io/sm5/171.png",
     "subtype": "Special",
     "supertype": "Energy",

@@ -20,6 +20,19 @@ import os
 Base.metadata.bind = Engine
 Base.metadata.create_all()
 
+def name_normalizer_mappings(name):
+    mapping = {
+        'Unit Energy LightningPsychicMetal': 'Unit Energy LPM',
+        'Unit Energy GrassFireWater': 'Unit Energy GFW',
+        'Unit Energy FightingDarknessFairy': 'Unit Energy FDY',
+    }
+
+    if name in mapping.keys():
+        return mapping[name]
+    else:
+        return mapping.replace("◇", "Prism Star").replace("{*}", "Prism Star")
+
+
 def seed():
     if len(ses.query(CardSet).all()) <= 0:
         s1 = CardSet(name="XY - Kalos Starter Set", setName="KSS", standard=False, shortName="Kalos Starter Set", fileName="Kalos Starter Set.json")
@@ -48,6 +61,7 @@ def seed():
         s42 = CardSet(name="Sun & Moon - Celestial Storm", setName="CES", standard=True, shortName="Celestial Storm", fileName="Celestial Storm.json")
         s43 = CardSet(name="Sun & Moon - Dragon Majesty", setName="DRM", standard=True, shortName="Dragon Majesty", fileName="Dragon Majesty.json")
         s44 = CardSet(name="Sun & Moon - Lost Thunder", setName="LOT", standard=True, shortName="Lost Thunder", fileName="Lost Thunder.json")
+        s45 = CardSet(name="Sun & Moon - Team Up", setName="TEU", standard=True, shortName="Team Up", fileName="Team Up.json")
 
         s21 = CardSet(name="Sun & Moon - Shining Legends", setName="SLG", standard=True, shortName="Shining Legends", fileName="Shining Legends.json")
         #s22 = CardSet(name="Sun & Moon Trainer Kit", setName="TK", standard=True, shortName="Sun & Moon Trainer Kit", fileName="Sun & Moon Trainer Kit.json")
@@ -112,16 +126,15 @@ def seed():
         ses.add(s42)
         ses.add(s43)
         ses.add(s44)
+        ses.add(s45)
         ses.commit()
 
     sets = ses.query(CardSet).all()
 
     if(len(ses.query(Card).all()) <= 0):
         ElasticStore.indices.delete(index='card-index')
-        #for item in glob.glob('./Data/json/cards/*'):
         for setList in sets:
             item = "./Data/json/cards/{}".format(setList.fileName)
-            print(item)
             with open(item, encoding="utf8") as f:
                 data = json.load(f)
                 for d in data:
