@@ -22,17 +22,20 @@ def get_events(start, end):
 
 def get_list_from_official(url, start, end):
 	''' Get deck from url provided '''
-	page = requests.get(url, headers={'User-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'})
+	page = requests.get(url, headers={'User-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'},verify=False)
 	tree = html.fromstring(page.content)
 
 	# Get the value of the table
 	columns = tree.xpath('//*[@id="table-1"]/tbody/tr')
 	for c in columns:
 		content = list()
+		link = ""
 		for i in c.iterchildren():
 			content.append(i.text_content().strip())
+			if i.find("a") is not None:
+				link = i.find("a").get('href')
 		if len(content) == 7 and (content[0] == "Pokémon TCG" or content[0] == "ALL"):
-			event = Event(title=content[2], location=content[3], status=content[4], date=datetime.strptime(content[5], "%b %d, %Y %I:%M%p"))
+			event = Event(title=content[2], location=content[3], status=content[4], date=datetime.strptime(content[5], "%b %d, %Y %I:%M%p"), link=link)
 			# Prevent duplicate events and cache existing events
 			if ses.query(Event).filter(Event.title==event.title, Event.date==event.date, Event.location==event.location).count() == 0:
 				ses.add(event)

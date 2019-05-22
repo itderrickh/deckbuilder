@@ -11,6 +11,7 @@ class Event(Base, Serializer):
 	location = Column(String)
 	status = Column(String)
 	date = Column(DateTime)
+	link = Column(String)
 
 	def serialize(self):
 		d = Serializer.serialize(self)

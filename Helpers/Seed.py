@@ -10,6 +10,7 @@ from Models.UserEvent import UserEvent
 from AppState.Session import Engine
 from passlib.hash import pbkdf2_sha256
 from unidecode import unidecode
+from collections import namedtuple
 from Helpers.DeckLib import get_deck_from_source
 from Helpers.SetHelper import getSet
 import datetime
@@ -30,7 +31,7 @@ def name_normalizer_mappings(name):
     if name in mapping.keys():
         return mapping[name]
     else:
-        return mapping.replace("◇", "Prism Star").replace("{*}", "Prism Star")
+        return name.replace("◇", "Prism Star").replace("{*}", "Prism Star")
 
 
 def seed():
@@ -138,8 +139,9 @@ def seed():
             with open(item, encoding="utf8") as f:
                 data = json.load(f)
                 for d in data:
+                    finalizedName = name_normalizer_mappings(d['name'])
                     card = Card(
-                        name=unidecode(d['name'].replace("◇", "Prism Star").replace("{*}", "Prism Star")),
+                        name=unidecode(finalizedName),
                         subtype=d.get('subtype'),
                         type=d.get('supertype'),
                         evolvesFrom=d.get('evolvesFrom', ''),
@@ -160,6 +162,7 @@ def seed():
                     ses.flush()
                     ElasticStore.index(index="card-index", doc_type='card', id=card.Id, body=card.serialize())
         ses.commit()
+        print("Done seeding. . .")
 
     if len(ses.query(User).all()) <= 0:
         u1 = User(
@@ -203,7 +206,8 @@ def seed():
                             card = ses.query(Card).filter(Card.name==value['card'], Card.setName==getSet(sets, value['set']), Card.number==value['number']).first()
                         if card is None:
                             cards = ElasticStore.search(index="card-index", body={"size": 1, "query": {"match": { "name": value['card'] }}})
-                            card = cards['hits']['hits'][0]['_source']
+                            c_dict = cards['hits']['hits'][0]['_source']
+                            card = namedtuple("Card", c_dict.keys())(*c_dict.values())
                         ses.add(DeckCard(deckId=deck.id,cardId=card.Id,count=value['count']))
 
                     ses.commit()

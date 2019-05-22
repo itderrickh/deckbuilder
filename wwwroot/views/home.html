@@ -14,7 +14,7 @@
                 <th></th>
             </tr>
             <tr ng-repeat="event in homeCtrl.events">
-                <td>{{event.title}}</td>
+                <td><a ng-href="https://www.pokemon.com{{event.link}}">{{event.title}}</a></td>
                 <td>{{event.date | date : 'MM/dd/yyyy @ h:mma'}}</td>
                 <td><a ng-href="https://www.google.com/maps/dir/?api=1&destination={{event.location}}" target="_blank">{{event.location}}</a></td>
                 <td><button ng-click="homeCtrl.hideEvent(event)" class="btn btn-primary">X</button></td>
