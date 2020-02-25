@@ -40,7 +40,7 @@
     "font-awesome": "^4.7.0",
     "fullcalendar": "^3.9.0",
     "gulp-shell": "^0.7.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.0",
     "moment": "^2.23.0",
     "ngclipboard": "^2.0.0",
     "noty": "^3.2.0-beta",
