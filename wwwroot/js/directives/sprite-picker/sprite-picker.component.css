@@ -1,0 +1,13 @@
+.sprite-picker {
+	position: absolute;
+	display: none;
+	background-color: white;
+	width: 600px;
+	height: 400px;
+	z-index: 1000;
+	overflow: scroll;
+}
+
+.sprite-picker.open {
+	display: block;
+}

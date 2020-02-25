@@ -9,6 +9,7 @@ gulp.task('pack-js', function () {
 	return gulp.src([
 			'wwwroot/js/*.js',
 			'wwwroot/js/controllers/*.js',
+			'wwwroot/js/directives/**/*.js',
 			'wwwroot/js/services/*.js'])
 		.pipe(concat('bundle.js'))
 		.pipe(minify({
@@ -54,6 +55,7 @@ gulp.task('pack-css', function () {
 			'node_modules/noty/lib/noty.css',
 			'node_modules/noty/lib/themes/bootstrap-v4.css',
 			'node_modules/sweetalert2/dist/sweetalert2.min.css',
+			'wwwroot/js/directives/**/*.css',
 			'wwwroot/css/*.css'
 		])
 		.pipe(concat('stylesheet.css'))

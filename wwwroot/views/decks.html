@@ -7,6 +7,7 @@
             <label for="deckList">Deck: <select id="deckList" class="custom-select" ng-model="deckCtrl.selectedDeck" ng-options="item.name for item in deckCtrl.decks"></select></label>
             <button class="btn btn-primary" ng-click="deckCtrl.loadDeck(false)">View</button>
             <button class="btn btn-primary" ng-click="deckCtrl.loadDeck(true)">View Images</button>
+            <img ng-repeat="sprite in deckCtrl.selectedDeck.sprites" ng-src="assets/sprites/{{sprite}}.png" alt="">
         </div>
         <div ng-if="deckCtrl.decks.length == 0">
             <h6>You have no decks created. Either <a ng-href="#!import">import</a> decks or <a ng-href="#!create">create</a> a deck to get started!</h6>

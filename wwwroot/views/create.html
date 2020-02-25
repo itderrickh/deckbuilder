@@ -5,6 +5,8 @@
             <div class="form-group">
                 <label for="deckList">Deck Name:</label>
                 <input type="text" class="form-control" ng-model="createCtrl.name" />
+                <sprite-picker ng-repeat="sprite in createCtrl.sprites track by $index" sprite="sprite" sprite-select="createCtrl.selectSprite($index, sprite)"></sprite-picker>
+                <span ng-click="createCtrl.addSprite()">+</span>
             </div>
             <div>
                 Card Count: {{createCtrl.deckData.length}}

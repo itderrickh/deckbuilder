@@ -7,6 +7,8 @@
             <div class="form-group">
                 <label for="deckName">Deck: </label>
                 <input type="text" class="form-control" placeholder="My Cool Deck" ng-model="importCtrl.form.deckName" />
+                <sprite-picker ng-repeat="sprite in importCtrl.sprites track by $index" sprite="sprite" sprite-select="importCtrl.selectSprite($index, sprite)"></sprite-picker>
+                <span ng-click="importCtrl.addSprite()">+</span>
             </div>
 
             <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-bottom: 10px">

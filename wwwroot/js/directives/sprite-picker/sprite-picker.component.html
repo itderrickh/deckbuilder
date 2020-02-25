@@ -1,0 +1,9 @@
+<i class="sprite" ng-click="openEditor($event)">
+	<img src="assets/sprites/{{sprite}}.png" />
+</i>
+
+<div class="sprite-picker" ng-class="{ 'open': open }" ng-style="{ 'left.px': openPosition[0], 'top.px': openPosition[1] }">
+	<i ng-repeat="number in spriteRange" ng-click="selectSprite(number)">
+		<img ng-src="assets/sprites/{{number}}.png" />
+	</i>
+</div>

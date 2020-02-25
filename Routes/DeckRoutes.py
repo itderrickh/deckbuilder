@@ -28,7 +28,7 @@ deck_routes = Blueprint('deck_routes', __name__,
 @jwt_required()
 def create_deck_bulk():
 	content = request.get_json()
-	deck = Deck(name=content['name'], userId=current_identity.id)
+	deck = Deck(name=content['name'], userId=current_identity.id, sprites=";".join(content['sprites']))
 	ses.add(deck)
 	ses.commit()
 
@@ -79,7 +79,7 @@ def add_deck():
 	content = request.get_json()
 	deck_list = get_deck_from_source(content['text'])
 	sets = ses.query(CardSet).all()
-	deck = Deck(name=content['name'], userId=current_identity.id)
+	deck = Deck(name=content['name'], userId=current_identity.id, sprites=";".join(content['sprites']))
 
 	try:
 		ses.add(deck)
@@ -118,7 +118,7 @@ def import_limitless_deck():
 	content = request.get_json()
 	deck_list = get_deck_from_limitless_tcg(content['url'])
 	sets = ses.query(CardSet).all()
-	deck = Deck(name=content['name'], userId=current_identity.id)
+	deck = Deck(name=content['name'], userId=current_identity.id, sprites=";".join(content['sprites']))
 
 	try:
 		ses.add(deck)

@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from elasticsearch import Elasticsearch
 import json
 
-Engine = create_engine('sqlite:///deck_builder.db')
+Engine = create_engine('sqlite:///deck_builder.db', connect_args={'check_same_thread': False})
 
 Session = sessionmaker(bind=Engine)
 ElasticStore = Elasticsearch()

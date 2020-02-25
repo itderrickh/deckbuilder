@@ -2,6 +2,7 @@ app.controller('CreateController', ['CreateService', function(createService) {
     var createCtrl = this;
     createCtrl.searchField = "";
     createCtrl.name = '';
+    createCtrl.sprites = ['001'];
     createCtrl.largeUrl = '';
     createCtrl.count = {
         pokemon: 0,
@@ -11,6 +12,14 @@ app.controller('CreateController', ['CreateService', function(createService) {
 
     createCtrl.searchData = {};
     createCtrl.deckData = [];
+
+    createCtrl.addSprite = function() {
+        createCtrl.sprites.push('001');
+    }
+
+    createCtrl.selectSprite = function(index, sprites) {
+        createCtrl.sprites[index] = sprites;
+    };
 
     createCtrl.newAdd = function(card) {
         createCtrl.deckData.push(card);
@@ -31,6 +40,7 @@ app.controller('CreateController', ['CreateService', function(createService) {
         
         createService.createDeck({
             'name': createCtrl.name,
+            'sprites': createCtrl.sprites,
             'deck': deck
         }).then(function(response) {
             swal(
